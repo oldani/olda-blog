@@ -17,6 +17,8 @@
 import webapp2
 import jinja2
 import os
+import logging
+import time
 
 from basedatos import post_db
 
@@ -41,14 +43,21 @@ class Handler(webapp2.RequestHandler):
 	def render(self, template, **d):
 		self.write(self.render_string(template, **d))
 
-
-
+CACHE={}
+def cachFront(update=False):
+	key="top"
+	entradas=memcache.get(key)
+	if entradas is None or update:
+		logging.error("DB QUERY")
+		post= db.GqlQuery("select * from dbEntradas order by fecha_creacion desc limit 10")
+		entradas=list(post)
+		memcache.set(key, entradas)
+	return entradas
 
 
 class MainHandler(Handler):
     def get(self):
-    	post= db.GqlQuery("select * from dbEntradas order by fecha_creacion desc limit 10")
-    	entradas=list(post)
+    	entradas= cachFront()
         self.render("index.html", entradas=entradas)
 
 
@@ -66,8 +75,11 @@ class NewPostHandler(Handler):
 		post= self.request.get("post")
 
 		if titulo and post  and (topic!="Choose one.."):
-			entrada= dbEntradas(title=titulo, post=post, topic=topic)
+			entrada= post_db.dbEntradas(title=titulo, post=post, topic=topic)
 			entrada.put()
+			time.sleep(1)
+			cachFront(True)
+			self.redirect('/')
 
 
 		else:
