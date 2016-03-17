@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block contenido %}
+
+	<form method="post">
+		<div class="row">
+			<div class="form-group col-xs-9 col-sm-6">
+				<label>Title</label>
+				<input type="text" name="title" class="form-control" value={{titulo}}>	
+			</div>
+			<div class="form-group col-xs-4 col-sm-3 col-md-2 col-lg-2">
+				<label>Topic</label>
+				<select class="form-control" name="topic">
+					<option>Choose one..</option>
+					<option>News</option>
+					<option>Games</option>
+					<option>Culture</option>
+					<option>Science</option>
+					<option>Technology</option>
+					<option>Sports</option>
+
+				</select>
+
+			</div>
+		</div>
+		<div class="row">
+			<div class="form-group col-xs-10">
+				<label>Post</label>
+				<textarea name="post" placeholder="Your Post Here" class="form-control" rows="10">{{post}}</textarea>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-10 col-sm-5 col-md-4 col-lg-4">
+				{% if error %}
+					<div class="alert alert-danger">{{error}}</div>
+				{% endif %}
+			</div>
+		</div>
+		<button type="submit" class="btn btn-default">Submit</button>
+		
+
+
+
+	</form>
+
+	
+
+{% endblock %}

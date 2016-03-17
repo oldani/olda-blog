@@ -1,0 +1,22 @@
+application: olda-blog
+version: 2
+runtime: python27
+api_version: 1
+threadsafe: yes
+
+handlers:
+- url: /favicon\.ico
+  static_files: blog.ico
+  upload: favicon\.ico
+
+- url: /estatico
+  static_dir: estatico
+
+- url: .*
+  script: blog.app
+
+libraries:
+- name: webapp2
+  version: "2.5.2"
+- name: jinja2
+  version: "latest"
