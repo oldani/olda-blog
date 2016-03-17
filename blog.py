@@ -20,7 +20,8 @@ import os
 import logging
 import time
 
-from basedatos import post_db
+from basedatos.post_db import dbEntradas
+
 
 from google.appengine.ext import db
 from google.appengine.api import memcache
@@ -43,7 +44,6 @@ class Handler(webapp2.RequestHandler):
 	def render(self, template, **d):
 		self.write(self.render_string(template, **d))
 
-CACHE={}
 def cachFront(update=False):
 	key="top"
 	entradas=memcache.get(key)
@@ -75,7 +75,7 @@ class NewPostHandler(Handler):
 		post= self.request.get("post")
 
 		if titulo and post  and (topic!="Choose one.."):
-			entrada= post_db.dbEntradas(title=titulo, post=post, topic=topic)
+			entrada= dbEntradas(title=titulo, post=post, topic=topic)
 			entrada.put()
 			time.sleep(1)
 			cachFront(True)
@@ -87,7 +87,15 @@ class NewPostHandler(Handler):
 			self.renderizar(error, titulo, post)
 
 
+class PostHandler(Handler):
+	def get(self, postId):
+		self.write()
+
+
+
+
 app = webapp2.WSGIApplication([
     ('/?', MainHandler),
-    ("/newpost", NewPostHandler)
+    ("/newpost", NewPostHandler),
+    ("/([0-9]+)", PostHandler)
 ], debug=True)
