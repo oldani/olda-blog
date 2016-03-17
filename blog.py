@@ -18,6 +18,8 @@ import webapp2
 import jinja2
 import os
 
+from basedatos import post_db
+
 from google.appengine.ext import db
 from google.appengine.api import memcache
 
@@ -40,18 +42,14 @@ class Handler(webapp2.RequestHandler):
 		self.write(self.render_string(template, **d))
 
 
-class dbEntradas(db.Model):
-	title= db.StringProperty(required=True)
-	post= db.TextProperty(required=True)
-	topic= db.StringProperty(required=True)
-	fecha_creacion= db.DateTimeProperty(auto_now_add=True)
+
 
 
 class MainHandler(Handler):
     def get(self):
     	post= db.GqlQuery("select * from dbEntradas order by fecha_creacion desc limit 10")
-    	#entradas=list(post)
-        self.render("index.html", entradas=post)
+    	entradas=list(post)
+        self.render("index.html", entradas=entradas)
 
 
 class NewPostHandler(Handler):
