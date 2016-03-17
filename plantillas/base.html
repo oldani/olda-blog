@@ -34,8 +34,11 @@
 				</div>
 				<div class="navbar-collapse collapse" id="menu">
 					<ul class="nav navbar-nav navbar-right">
-						<li><a href="#">Log In</a></li>
-						<li><a href="#">Sign Up</a></li>
+						<li><a href="/">Home</a></li>
+						{% if not login %}
+							<li><a href="#">Log In</a></li>
+							<li><a href="#">Sign Up</a></li>
+						{% endif %}
 						<li><a href="#">About</a></li>
 					</ul>
 				<div>

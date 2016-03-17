@@ -60,7 +60,7 @@ def cachFront(update=False):
 class MainHandler(Handler):
     def get(self):
     	entradas= cachFront()
-        self.render("index.html", entradas=entradas, login=True)
+        self.render("index.html", entradas=entradas)
 
 
 class NewPostHandler(Handler):
