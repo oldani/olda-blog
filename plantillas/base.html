@@ -28,6 +28,9 @@
 						<span class="icon-bar"></span>
 					</button>
 					<a href="/" class="navbar-brand">OLDA BLOg</a>
+					{% if login %}
+						<a href="/newpost" class="btn btn-primary navbar-btn btn-sm">New Post <span class="glyphicon glyphicon-pencil"></span></a>
+					{% endif %}
 				</div>
 				<div class="navbar-collapse collapse" id="menu">
 					<ul class="nav navbar-nav navbar-right">

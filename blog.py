@@ -60,7 +60,7 @@ def cachFront(update=False):
 class MainHandler(Handler):
     def get(self):
     	entradas= cachFront()
-        self.render("index.html", entradas=entradas)
+        self.render("index.html", entradas=entradas, login=True)
 
 
 class NewPostHandler(Handler):
@@ -101,6 +101,8 @@ class PostHandler(Handler):
 			self.render_post(post)
 		else:
 			post= dbEntradas.get_by_id(int(postId))
+			if not post:
+				self.redirect('/')
 			memcache.set(postId, post)
 			self.render_post(post)
 
