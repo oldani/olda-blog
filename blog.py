@@ -55,6 +55,8 @@ def cachFront(update=False):
 	return entradas
 
 
+
+
 class MainHandler(Handler):
     def get(self):
     	entradas= cachFront()
@@ -77,9 +79,13 @@ class NewPostHandler(Handler):
 		if titulo and post  and (topic!="Choose one.."):
 			entrada= dbEntradas(title=titulo, post=post, topic=topic)
 			entrada.put()
+			postId= str(entrada.key().id())
 			time.sleep(1)
+			# bug de consistencia el cache se actializa antes de
+			# que se complete la transacion
+			memcache.set(postId, entrada)
 			cachFront(True)
-			self.redirect('/')
+			self.redirect('/%s' %postId)
 
 
 		else:
@@ -89,7 +95,24 @@ class NewPostHandler(Handler):
 
 class PostHandler(Handler):
 	def get(self, postId):
-		self.write()
+		post=memcache.get(postId)
+
+		if post:
+			self.render_post(post)
+		else:
+			post= dbEntradas.get_by_id(int(postId))
+			memcache.set(postId, post)
+			self.render_post(post)
+
+	def render_post(self, post):
+		self.render("post.html", post=post)
+
+		
+
+		#if exiteste
+			#los renderizamos
+		#si no:
+		 #raise a error
 
 
 
