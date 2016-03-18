@@ -81,8 +81,8 @@ class NewPostHandler(Handler):
 			entrada.put()
 			postId= str(entrada.key().id())
 			time.sleep(1)
-			# bug de consistencia el cache se actializa antes de
-			# que se complete la transacion
+ 			# bug de consistencia el cache se actializa antes de
+ 			# que se complete la transacion
 			memcache.set(postId, entrada)
 			cachFront(True)
 			self.redirect('/%s' %postId)
@@ -111,10 +111,6 @@ class PostHandler(Handler):
 
 		
 
-		#if exiteste
-			#los renderizamos
-		#si no:
-		 #raise a error
 
 
 

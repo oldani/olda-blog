@@ -7,8 +7,9 @@
 					<div class="row">
 						<div class="col-xs-10 col-xs-offset-1 col-md-12 col-md-offset-0">
 							
-							<h3><a class="text-uppercase" href="/{{cadaPost.key().id()}}">{{cadaPost.title}}</a></h3>
+							<h3><a class="text-uppercase links-post" href="/{{cadaPost.key().id()}}">{{cadaPost.title}}</a></h3>
 							<hr>
+							<h6 class="text-right"><i class="fa fa-user"></i> Ordanis &nbsp<i class="fa fa-calendar"></i> {{cadaPost.fecha_creacion.strftime("%b-%d-%Y")}}</h6>
 							<p class="text-justify">{{cadaPost.post | safe}}</p>
 
 						</div>
