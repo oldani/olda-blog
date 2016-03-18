@@ -19,6 +19,7 @@ import jinja2
 import os
 import logging
 import time
+import json
 
 from basedatos.post_db import dbEntradas
 
@@ -111,6 +112,23 @@ class PostHandler(Handler):
 
 		
 
+class LoginHandler(Handler):
+	def get(self):
+		self.render("login.html")
+
+	def post(self):
+		a=self.request.body
+		b=a.split("&")
+		c=[cada.split("=") for cada in b]
+		c.append("CLAVE")
+		d= json.dumps(c)
+		self.response.headers['Content-Type']= 'application/json; charset=utf-8'
+		self.write(d)
+
+
+		logging.error(d)
+		
+		
 
 
 
@@ -118,5 +136,6 @@ class PostHandler(Handler):
 app = webapp2.WSGIApplication([
     ('/?', MainHandler),
     ("/newpost", NewPostHandler),
-    ("/([0-9]+)", PostHandler)
+    ("/([0-9]+)", PostHandler),
+    ("/login", LoginHandler)
 ], debug=True)
