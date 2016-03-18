@@ -10,13 +10,8 @@
 	<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
   	<script>tinymce.init({ selector:'textarea' });</script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-
-
-
-
 </head>
 <body>
-
 	<header>
 		<nav class="navbar navbar-default navbar-static-top">
 			<div class="container">
@@ -36,8 +31,8 @@
 					<ul class="nav navbar-nav navbar-right">
 						<li><a href="/">Home</a></li>
 						{% if not login %}
-							<li><a href="#" >Log In</a></li>
-							<li><a href="#">Sign Up</a></li>
+							<li><a href="#" data-toggle="modal" data-target="#login">Log In</a></li>
+							<li><a href="#" data-toggle="modal" data-target="#signup">Sign Up</a></li>
 						{% endif %}
 						<li><a href="#">About</a></li>
 					</ul>
@@ -45,12 +40,9 @@
 			</div>
 		</nav>
 	</header>
-
 	<!--Aqui empieza el modal log in -->
-	<!-- <div class="modal fade" id="login">
-
+	<div class="modal fade modal-xxs" id="login">
 		<div class="modal-dialog">
-
 			<div class="modal-content">
 				<div class="modal-header">
 					<h4 class="modal-title">Log In</h4>
@@ -58,20 +50,18 @@
 				<form method="post">
 					<div class="modal-body">
 						<div class="row">
-							<div class="form-group col-xs-8 col-sm-6 col-md-6">
+							<div class="form-group col-xs-8 modal-xs-8 col-sm-5 col-md-6">
 								<label>Username</label>
 								<div class="input-group">
 									<div class="input-group-addon">
 										<i class="fa fa-user"></i>
 									</div>
-									<input type="text" name="usuario" class="form-control" placeholder="Username">
-								
+									<input type="text" name="usuario" class="form-control" placeholder="Username">	
 								</div>
-
 							</div>
 						</div>
 						<div class="row">
-							<div class="form-group col-xs-8 col-md-6">
+							<div class="form-group col-xs-8 modal-xs-8 col-sm-5 col-md-6">
 								<label>Password</label>
 								<div class="input-group">
 									<div class="input-group-addon">
@@ -79,28 +69,77 @@
 									</div>
 									<input type="password" name="password" class="form-control" placeholder="************">
 								</div>
-
 							</div>
 						</div>
-
-
-						
-
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 						<button type="submit" class="btn btn-primary">Log In</button>
 					</div>
 				</form>
-
 			</div>
-
 		</div>
-
-
-	</div> -->
+	</div>
 	<!--Aqui acaba-->
-
+	<!--Aqui empieza el modal de sign up-->
+	<div class="modal fade modal-xxs" id="signup">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title">Sign Up</h4>
+				</div>
+				<form method="post">
+					<div class="modal-body">
+						<div class="row">
+							<div class="form-group col-xs-8 modal-col-xs-8 col-sm-5 col-md-6">
+								<label>Username</label>
+								<div class="input-group">
+									<div class="input-group-addon">
+										<i class="fa fa-user"></i>
+									</div>
+									<input type="text" name="username" class="form-control" placeholder="Username">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-xs-8 modal-col-xs-8 col-sm-5 col-md-6">
+								<label>Password</label>
+								<div class="input-group">
+									<div class="input-group-addon">
+										<i class="fa fa-lock"></i>
+									</div>
+									<input class="form-control" type="password" name="password" placeholder="***********">
+								</div>
+								<label>Verify Password</label>
+								<div class="input-group">
+									<div class="input-group-addon">
+										<i class="fa fa-lock"></i>
+									</div>
+									<input class="form-control" type="password" name="verify" placeholder="***********">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-xs-9 modal-col-xs-9 col-sm-6 col-md-7">
+								<label>Email</label>
+								<div class="input-group">
+									<div class="input-group-addon">
+										<i class="fa fa-envelope-o fa-fw"></i>
+									</div>
+									<input type="email" class="form-control" name="correo">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						<button type="submit" class="btn btn-primary">Sign Up</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<!--Aqui acaba-->
 	<div class="container">
 		{% block contenido %}
 		{% endblock %}
@@ -115,11 +154,7 @@
 				<a href="https://plus.google.com/+OrdaniSanchez" target="_blank" class="btn btn-default"><i class="fa fa-google-plus"></i></a>
 			</div>
 		</footer>
-
 	</div>
-	
-	
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-	
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>	
 </body>
 </html>
