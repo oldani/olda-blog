@@ -1,5 +1,39 @@
-{% extends "base.html" %}
-{% block contenido %}
-
-
-{% endblock%}
+<div class="modal fade modal-xxs" id="login">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Log In</h4>
+			</div>
+			<form method="post">
+				<div class="modal-body">
+					<div class="row">
+						<div class="form-group col-xs-8 modal-xs-8 col-sm-5 col-md-6">
+							<label>Username</label>
+							<div class="input-group">
+								<div class="input-group-addon">
+									<i class="fa fa-user"></i>
+								</div>
+								<input type="text" name="usuario" class="form-control" placeholder="Username">	
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="form-group col-xs-8 modal-xs-8 col-sm-5 col-md-6">
+							<label>Password</label>
+							<div class="input-group">
+								<div class="input-group-addon">
+									<i class="fa fa-lock"></i>
+								</div>
+								<input type="password" name="password" class="form-control" placeholder="************">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="submit" class="btn btn-primary">Log In</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
