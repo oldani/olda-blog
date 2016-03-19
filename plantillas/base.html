@@ -9,7 +9,7 @@
 	<link rel="stylesheet"  href="estatico/main.css">
 	<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
   	<script>tinymce.init({ selector:'textarea' });</script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+	
 </head>
 <body>
 	<header>
@@ -63,6 +63,18 @@
 			</div>
 		</footer>
 	</div>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+	<script type="text/javascript" src="estatico/validator.min.js"></script>
+	<script type="text/javascript" src="estatico/login.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			validarN();
+			validarPw();
+			confirmarPw();
+			validarMail();
+		})
+		
+	</script>	
 </body>
 </html>
