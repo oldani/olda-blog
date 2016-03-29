@@ -65,7 +65,6 @@
 	</div>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-	<script type="text/javascript" src="estatico/validator.min.js"></script>
 	<script type="text/javascript" src="estatico/login.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function(){
@@ -73,7 +72,24 @@
 			validarPw();
 			confirmarPw();
 			validarMail();
-		})
+
+			$('#signup> input').keyup(function() {
+
+				var empty1 = false;
+				$('#signup> input').each(function() {
+					if ($(this).val() === '') {
+ 					empty1 = true;
+					}
+				});
+
+				if (empty1) {
+					$('#register').attr('disabled', 'disabled');
+				} else {
+					//$('#register').removeAttr('disabled');
+     				$('#register').prop("disabled", false);
+				}
+			});
+		});
 		
 	</script>	
 </body>
