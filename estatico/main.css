@@ -45,3 +45,7 @@
 		max-width: 60%;
 	}
 }
+
+.has-feedback label~.form-control-feedback {
+	right: 10px;
+}
