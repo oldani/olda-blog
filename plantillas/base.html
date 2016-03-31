@@ -10,6 +10,10 @@
 	<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
   	<script>tinymce.init({ selector:'textarea' });</script>
 	
+  	<!--trying-->
+  	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/formvalidation/0.6.1/css/formValidation.min.css">
+  	<link rel="stylesheet" type="text/css" href="">
+  	
 </head>
 <body>
 	<header>
@@ -65,30 +69,57 @@
 	</div>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-	<script type="text/javascript" src="estatico/login.js"></script>
+
+	<!--trying-->
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/formvalidation/0.6.1/js/formValidation.min.js"></script>
+  	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/formvalidation/0.6.1/js/framework/bootstrap.min.js"></script>
+	
+
 	<script type="text/javascript">
 		$(document).ready(function(){
-			validarN();
-			validarPw();
-			confirmarPw();
-			validarMail();
-
-			$('#signup> input').keyup(function() {
-
-				var empty1 = false;
-				$('#signup> input').each(function() {
-					if ($(this).val() === '') {
- 					empty1 = true;
+			$("#signupForm").formValidation({
+				framework:"bootstrap",
+				
+				
+				fields: {
+					username: {
+						validators: {
+							regexp: {
+								regexp:/^[\w\-\.]{4,12}$/,
+								message: "The username most be more than 4 and less than 12 characters long"
+							}
+						}
+					},
+					password: {
+						validators: {
+							regexp: {
+								regexp:/(?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9])\S{6,}$/,
+								message:"Your Password must have at least of 1 Lowercase, 1 Uppercase letters and 1 number"
+							}
+						}
+					},
+					verify: {
+						validators: {
+							identical: {
+								field: "password",
+								message: "Your password did not match"
+							}
+						}
+					},
+					correo: {
+						validators: {
+							
+							regexp: {
+								regexp: /^[\S]+@[\S]+\.[\S]+$/,
+								message:"Please enter a valid Email"
+							}
+						}
 					}
-				});
-
-				if (empty1) {
-					$('#register').attr('disabled', 'disabled');
-				} else {
-					//$('#register').removeAttr('disabled');
-     				$('#register').prop("disabled", false);
+					
 				}
+				
 			});
+			
 		});
 		
 	</script>	
