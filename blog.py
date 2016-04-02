@@ -112,21 +112,9 @@ class PostHandler(Handler):
 
 		
 
-class LoginHandler(Handler):
-	def get(self):
-		self.render("login.html")
-
+class SignUpHandler(Handler):
 	def post(self):
-		a=self.request.body
-		b=a.split("&")
-		c=[cada.split("=") for cada in b]
-		c.append("CLAVE")
-		d= json.dumps(c)
-		self.response.headers['Content-Type']= 'application/json; charset=utf-8'
-		self.write(d)
-
-
-		logging.error(d)
+		a="hey"
 		
 		
 
@@ -137,5 +125,5 @@ app = webapp2.WSGIApplication([
     ('/?', MainHandler),
     ("/newpost", NewPostHandler),
     ("/([0-9]+)", PostHandler),
-    ("/login", LoginHandler)
+    ("/signup", SignUpHandler)
 ], debug=True)
