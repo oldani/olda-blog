@@ -1,6 +1,16 @@
 var wating= '<div class="row"><img class="img-responsive center-block"src="estatico/default.gif">\
 <p class="blinking text-center">Loging in...</p></div>'
 
+var makeBlink={
+	blinker: function() {
+		var $watingDom= $(".blinking");
+		$watingDom.fadeOut(300);
+		$watingDom.fadeIn(300);
+	},
+	
+
+};
+var intervalo= setInterval(makeBlink.blinker, 1000);
 
 var validarSignUp= function(){
 	$("#signupForm")
@@ -67,22 +77,18 @@ var validarSignUp= function(){
 					e.preventDefault();
 					var $form= $(e.target);
 					var modal= $form.children(".modal-body");
+					var datos= $form.serialize();
 					$.ajax({
 						url: $form.attr("action"),
 						method: "POST",
 						beforeSend: function(){
-							// var form= $('#signupForm').children(".modal-body");
-							modal.children().remove();
 							modal.html(wating);
-							function blinker() {
-								$('.blinking').fadeOut(300);
-								$('.blinking').fadeIn(300);
-							};
-							setInterval(blinker, 1000);
-			
+							makeBlink.blinker();
+							intervalo;
+						},
+						data: datos
+						
 
-
-						}
 
 					});
 				});	
