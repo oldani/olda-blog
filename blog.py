@@ -22,6 +22,10 @@ import time
 import json
 
 from basedatos.post_db import dbEntradas
+from basedatos.usuarios_db import usuarios
+
+from tools import cookies
+from tools import validar_datos
 
 
 from google.appengine.ext import db
@@ -44,6 +48,21 @@ class Handler(webapp2.RequestHandler):
 
 	def render(self, template, **d):
 		self.write(self.render_string(template, **d))
+
+	def set_cookie(self, name, valor):
+		cookie_hasheado= cookies.hashear_cookie(valor)
+		self.response.headers.add_header("Set-Cookie",
+								 "%s=%s; Path=/"%(name, cookie_hasheado))
+
+	def cookie_valido(self, name):
+		cookie= self.request.cookies.get(name)
+		return cookie and cookies.cookie_valido(cookie)
+
+	def login(self, user_id):
+		self.set_cookie("sesion", str(user_id))
+
+	def logout(self):
+		self.response.headers.add_header("Set-Cookie", "sesion=; Path=/")
 
 def cachFront(update=False):
 	key="top"
@@ -114,8 +133,41 @@ class PostHandler(Handler):
 
 class SignUpHandler(Handler):
 	def post(self):
-		a="hey"
+		usuario= self.request.get("username")
+		contra= self.request.get("password")
+		contra_verificada= self.request.get("verify")
+		correo= self.request.get("correo")
+		bad_data=False
+		parametros=dict(badData=bad_data)
 		
+		if not validar_datos.usuario_valido(usuario):
+			bad_data=True
+
+		if not validar_datos.contra_valida(contra):
+			bad_data=True
+
+		elif contra_verificada!= contra:
+			bad_data=True
+
+		if not validar_datos.correo_valido(correo):
+			bad_data=True
+
+		usuario_existe= usuarios.buscar_usuario(usuario)
+
+		if usuario_existe:
+			bad_data=True
+			parametros["user"]="This user already exist" 
+
+		if bad_data:
+			self.jsonEnviar(parametros)
+		else:
+			registrar= usuarios.registrar(usuario, contra, correo)
+			self.login(registrar)
+
+	def jsonEnviar(self, datos):
+		data= json.dumps(datos)
+		self.response.write(data)
+
 		
 
 

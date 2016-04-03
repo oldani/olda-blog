@@ -86,7 +86,11 @@ var validarSignUp= function(){
 							makeBlink.blinker();
 							intervalo;
 						},
-						data: datos
+						data: datos,
+						dataType: "json",
+						success: function(data) {
+							modal.append(data.user)
+						}
 						
 
 
