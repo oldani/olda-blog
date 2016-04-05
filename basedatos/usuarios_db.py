@@ -25,7 +25,7 @@ class usuarios(db.Model):
 	def logear(cls, name, pw):
 		cuenta= cls.buscar_usuario(name)
 		if cuenta and contra_valida(name, pw, cuenta.password):
-			return cuenta.key().id()
+			return dict(id=cuenta.key().id(), username=name)
 
 
 
