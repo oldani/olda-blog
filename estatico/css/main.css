@@ -1,0 +1,65 @@
+.links-post {
+	text-decoration: none;
+	color: #000;
+}
+
+.links-post:hover {
+	text-decoration: none;
+	color: #337ab7;
+}
+
+@media screen and (max-width: 499px) {
+	.modal-xxs {
+		max-width: 382px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	.modal-col-xs-8 {
+		max-width: 244px;
+	}
+
+	.modal-col-xs-9 {
+		max-width: 275px;
+	}
+
+	.col-xxs-4 {
+		min-width: 160px;
+	}
+}
+
+@media screen and (min-width:500px) and (max-width: 767px) {
+	.modal-xxs {
+		max-width: 70%;
+		margin-right: auto;
+		margin-left: auto;
+	}
+
+	.modal-col-xs-8 {
+		min-width: 244px;
+		max-width: 50%;
+	}
+
+	.modal-col-xs-9 {
+		min-width: 275px;
+		max-width: 60%;
+	}
+}
+
+.has-feedback label~.form-control-feedback {
+	right: 10px;
+}
+
+.fa-error {
+	color: #a60039;
+}
+
+.fa-success {
+	color: #1a7300;
+}
+
+.fotter {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+}

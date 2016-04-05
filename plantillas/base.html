@@ -6,17 +6,18 @@
 	<title>OLDA BLOG</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-	<link rel="stylesheet"  href="estatico/main.css">
+	<link rel="stylesheet"  href="estatico/css/main.css">
 	<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
   	<script>tinymce.init({ selector:'textarea' });</script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+	
+  	<!--trying-->
+  	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/formvalidation/0.6.1/css/formValidation.min.css">
 
+  	
 
-
-
+  	
 </head>
 <body>
-
 	<header>
 		<nav class="navbar navbar-default navbar-static-top">
 			<div class="container">
@@ -36,8 +37,8 @@
 					<ul class="nav navbar-nav navbar-right">
 						<li><a href="/">Home</a></li>
 						{% if not login %}
-							<li><a href="#">Log In</a></li>
-							<li><a href="#">Sign Up</a></li>
+							<li><a href="#" data-toggle="modal" data-target="#login">Log In</a></li>
+							<li><a href="#" data-toggle="modal" data-target="#signup">Sign Up</a></li>
 						{% endif %}
 						<li><a href="#">About</a></li>
 					</ul>
@@ -45,12 +46,22 @@
 			</div>
 		</nav>
 	</header>
-
+	{% if not login %}
+		<!--Aqui empieza el modal log in -->
+			{% include "login.html" %}
+		<!--Aqui acaba-->
+		<!--Aqui empieza el modal de sign up-->
+			{% include "signup.html" %}
+		<!--Aqui acaba-->
+	{% endif%}
 	<div class="container">
 		{% block contenido %}
 		{% endblock %}
-		<hr>
-		<footer class="row">	
+		
+	</div>
+	<footer class="fotter">
+		<div class="container">
+			<hr>	
 			<p class="text-right col-xs-6">
 				Created By Ordanis<br>Sanchez
 			</p>
@@ -59,12 +70,30 @@
 				<a href="https://github.com/oldani" target="_blank" class="btn btn-default"><i class="fa fa-github"></i></a>
 				<a href="https://plus.google.com/+OrdaniSanchez" target="_blank" class="btn btn-default"><i class="fa fa-google-plus"></i></a>
 			</div>
-		</footer>
-
-	</div>
-	
-	
+		</div>
+	</footer>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+	<!--trying-->
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/formvalidation/0.6.1/js/formValidation.min.js"></script>
+  	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/formvalidation/0.6.1/js/framework/bootstrap.min.js"></script>
+  	<script type="text/javascript" src="estatico/js/helper_vars.js"></script>
+  	<script type="text/javascript" src="estatico/js/validador.js"></script>
 	
+
+	<script type="text/javascript">
+		$(document).ready(function(){
+			validarForms();
+			$("#login").on("hidden.bs.modal", function(){
+				$("#loginForm").formValidation('resetForm', true);
+			});
+			$("#signup").on("hidden.bs.modal", function(){
+				$("#signupForm").formValidation("resetForm", true);
+			});
+			
+			
+		});	
+	</script>	
 </body>
 </html>

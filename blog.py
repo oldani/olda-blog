@@ -19,8 +19,13 @@ import jinja2
 import os
 import logging
 import time
+import json
 
 from basedatos.post_db import dbEntradas
+from basedatos.usuarios_db import usuarios
+
+from tools import cookies
+from tools import validar_datos
 
 
 from google.appengine.ext import db
@@ -44,6 +49,34 @@ class Handler(webapp2.RequestHandler):
 	def render(self, template, **d):
 		self.write(self.render_string(template, **d))
 
+	def set_cookie(self, name, valor):
+		cookie_hasheado= cookies.hashear_cookie(valor)
+		self.response.headers.add_header("Set-Cookie",
+								 "%s=%s; Path=/"%(name, cookie_hasheado))
+
+	def cookie_valido(self, name):
+		cookie= self.request.cookies.get(name)
+		return cookie and cookies.cookie_valido(cookie)
+
+	def login(self, user_id):
+		self.set_cookie("sesion", str(user_id))
+
+	def logout(self):
+		self.response.headers.add_header("Set-Cookie", "sesion=; Path=/")
+
+	def is_login(self):
+		cookie= self.cookie_valido("sesion")
+
+		if cookie:
+			return True
+		else:
+			return False
+
+	def enviar_json(self, datos):
+		data= json.dumps(datos)
+		self.response.write(data)
+
+
 def cachFront(update=False):
 	key="top"
 	entradas=memcache.get(key)
@@ -60,7 +93,8 @@ def cachFront(update=False):
 class MainHandler(Handler):
     def get(self):
     	entradas= cachFront()
-        self.render("index.html", entradas=entradas)
+    	self.render("index.html", entradas=entradas, login=self.is_login())
+    	
 
 
 class NewPostHandler(Handler):
@@ -111,6 +145,65 @@ class PostHandler(Handler):
 
 		
 
+class SignUpHandler(Handler):
+	def post(self):
+		usuario= self.request.get("username")
+		contra= self.request.get("password")
+		contra_verificada= self.request.get("verify")
+		correo= self.request.get("correo")
+		bad_data=False
+		parametros=list()
+		data=dict()
+
+		usuario_existe= usuarios.buscar_usuario(usuario)
+
+		if usuario_existe:
+			data["user"]="This username already exist"
+			self.enviar_json(data)
+
+		else:
+
+			if not validar_datos.usuario_valido(usuario):
+				bad_data=True
+				parametros.append("username")
+
+			if not validar_datos.contra_valida(contra):
+				bad_data=True
+				parametros.append("a password")
+
+			elif contra_verificada!= contra:
+				bad_data=True
+				parametros.append("a password that match")
+
+			if not validar_datos.correo_valido(correo):
+				bad_data=True
+				parametros.append("an email")
+
+			if bad_data:
+				data["badData"]= True
+				data["errores"]=parametros
+				self.enviar_json(data)
+			else:
+				registrar= usuarios.registrar(usuario, contra, correo)
+				self.login(registrar.get("id"))
+				data["username"]= registrar.get("username")
+				self.enviar_json(data)
+
+	
+class LoginHandler(Handler):
+	def post(self):
+		username=self.request.get("username")
+		password= self.request.get("password")
+		data=dict()
+
+		cuenta= usuarios.logear(username, password)
+		if cuenta:
+			self.login(cuenta.get("id"))
+			data["username"]= cuenta.get("username")
+			self.enviar_json(data)
+		else:
+			data["error"]= "Username or Password not valid, try again"
+			self.enviar_json(data)		
 
 
 
@@ -118,5 +211,7 @@ class PostHandler(Handler):
 app = webapp2.WSGIApplication([
     ('/?', MainHandler),
     ("/newpost", NewPostHandler),
-    ("/([0-9]+)", PostHandler)
+    ("/([0-9]+)", PostHandler),
+    ("/signup", SignUpHandler),
+    ("/login", LoginHandler)
 ], debug=True)

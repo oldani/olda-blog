@@ -1,0 +1,61 @@
+<div class="modal fade modal-xxs" id="signup">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Sign Up</h4>
+			</div>
+			<form method="post" role="form" id="signupForm" action="/signup">
+				<div class="modal-body">
+					<div class="row">
+						<div class="form-group col-xs-8 modal-col-xs-8 col-sm-5 col-md-6">
+							<label class="control-label">Username</label>
+							<div class="input-group">
+								<div class="input-group-addon">
+									<i class="fa fa-user"></i>
+								</div>
+								<input type="text" name="username" class="form-control" placeholder="Username" required>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="form-group col-xs-8 modal-col-xs-8 col-sm-5 col-md-6">
+							<label class="control-label">Password</label>
+							<div class="input-group">
+								<div class="input-group-addon">
+									<i class="fa fa-lock"></i>
+								</div>
+								<input class="form-control" type="password" name="password" placeholder="***********" required>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="form-group col-xs-8 modal-col-xs-8 col-sm-5 col-md-6">		
+							<label class="control-label">Verify Password</label>
+							<div class="input-group">
+								<div class="input-group-addon">
+									<i class="fa fa-lock"></i>
+								</div>
+								<input class="form-control" type="password" name="verify" placeholder="***********" required>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="form-group col-xs-9 modal-col-xs-9 col-sm-6 col-md-7">
+							<label class="control-label">Email</label>
+							<div class="input-group">
+								<div class="input-group-addon">
+									<i class="fa fa-envelope-o fa-fw"></i>
+								</div>
+								<input type="email" class="form-control" name="correo"required>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="submit" class="btn btn-primary" id="submit">Sign Up</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
