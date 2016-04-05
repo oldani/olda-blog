@@ -49,3 +49,17 @@
 .has-feedback label~.form-control-feedback {
 	right: 10px;
 }
+
+.fa-error {
+	color: #a60039;
+}
+
+.fa-success {
+	color: #1a7300;
+}
+
+.fotter {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+}
