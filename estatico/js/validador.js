@@ -9,6 +9,7 @@ var validarForms= function(){
 					err: {
 						container: 'popover'
 					},
+					excluded: ":disabled, :hidden, :not(:visible)",
 
 					icon: {
 						valid: 'glyphicon glyphicon-ok',
@@ -104,6 +105,70 @@ var validarForms= function(){
 								.prop("disabled", false);
 					});	
 				});
+	$("#loginForm")
+				.formValidation({
+					framework: "bootstrap",
+					icon:{
+						valid: "glyphicon glyphicon-ok",
+						invalid: "glyphicon glyphicon-remove"
+					},
+					excluded:":hidden, :not(:visible), :disabled",
+					fields:{
+						username:{
+							validators:{
+								notEmpty:{
+									message:"Please enter a username"
+								}
+							}
+						},
+						password:{
+							validators:{
+								notEmpty:{
+									message:"Please enter a password"
+								}
+							}
+						}
+					}
+				})
+				.on("success.form.fv", function(e){
+					e.preventDefault();
+					var $form= $(e.target);
+					var modal= $form.children(".modal-body");
+					var data= $form.serialize();
+					var modalClonado= modal.children(".row").clone();
+					// var footer= $form.children(".modal-footer");
+					// var footerClonado= footer.children(".btn").detach();
+
+					$.ajax({
+						url: $form.attr("action"),
+						method:"POST",
+						beforeSend: function(){
+							modal.html(wating);
+							makeBlink.blinker();
+							intervalo;
+							//footer.html("");
+						},
+						data:data,
+						dataType: "json",
+						success: function(data){
+							if ("error" in data) {
+								modal.html(error+data.error+cerrarError);
+							} else {
+								modal.html(success+data.username+cerrarSuccess);
+								window.location.reload();
+							};
+						}
+
+					});
+					$form.on("click", "button", function(){
+						modal.html(modalClonado);
+						// footer.html(footerClonado);
+						$form.find("#submitLogin")
+											.removeClass("disabled")
+											.prop("disabled", false);
+					});
+				});
+
 				
 				
 }

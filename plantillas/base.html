@@ -84,7 +84,13 @@
 
 	<script type="text/javascript">
 		$(document).ready(function(){
-			validarSignUp();
+			validarForms();
+			$("#login").on("hidden.bs.modal", function(){
+				$("#loginForm").formValidation('resetForm', true);
+			});
+			$("#signup").on("hidden.bs.modal", function(){
+				$("#signupForm").formValidation("resetForm", true);
+			});
 			
 			
 		});	

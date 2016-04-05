@@ -194,10 +194,13 @@ class LoginHandler(Handler):
 	def post(self):
 		username=self.request.get("username")
 		password= self.request.get("password")
+		data=dict()
 
 		cuenta= usuarios.logear(username, password)
 		if cuenta:
 			self.login(cuenta.get("id"))
+			data["username"]= cuenta.get("username")
+			self.enviar_json(data)
 		else:
 			data["error"]= "Username or Password not valid, try again"
 			self.enviar_json(data)		
