@@ -72,6 +72,10 @@ class Handler(webapp2.RequestHandler):
 		else:
 			return False
 
+	def enviar_json(self, datos):
+		data= json.dumps(datos)
+		self.response.write(data)
+
 
 def cachFront(update=False):
 	key="top"
@@ -185,11 +189,18 @@ class SignUpHandler(Handler):
 				data["username"]= registrar.get("username")
 				self.enviar_json(data)
 
-	def enviar_json(self, datos):
-		data= json.dumps(datos)
-		self.response.write(data)
+	
+class LoginHandler(Handler):
+	def post(self):
+		username=self.request.get("username")
+		password= self.request.get("password")
 
-		
+		cuenta= usuarios.logear(username, password)
+		if cuenta:
+			self.login(cuenta.get("id"))
+		else:
+			data["error"]= "Username or Password not valid, try again"
+			self.enviar_json(data)		
 
 
 
@@ -198,5 +209,6 @@ app = webapp2.WSGIApplication([
     ('/?', MainHandler),
     ("/newpost", NewPostHandler),
     ("/([0-9]+)", PostHandler),
-    ("/signup", SignUpHandler)
+    ("/signup", SignUpHandler),
+    ("/login", LoginHandler)
 ], debug=True)
