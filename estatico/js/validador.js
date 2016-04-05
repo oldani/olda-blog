@@ -1,15 +1,7 @@
 
-var makeBlink={
-	blinker: function() {
-		var $watingDom= $(".blinking");
-		$watingDom.fadeOut(300);
-		$watingDom.fadeIn(300);
-	}
 
-};
-var intervalo= setInterval(makeBlink.blinker, 1000);
 
-var validarSignUp= function(){
+var validarForms= function(){
 	$("#signupForm")
 				
 				.formValidation({

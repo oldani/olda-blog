@@ -1,4 +1,4 @@
-var wating= '<div class="row"><img class="img-responsive center-block"src="estatico/default.gif">\
+var wating= '<div class="row"><img class="img-responsive center-block"src="estatico/img/default.gif">\
 <p class="blinking text-center">Loging in...</p></div>'
 
 var error= '<div class="row">\
@@ -32,3 +32,13 @@ var success= '<div class="row">\
 						<p class="text-center">Welcome, ';
 
 var cerrarSuccess= '</p></div></div></div>';
+
+var makeBlink={
+	blinker: function() {
+		var $watingDom= $(".blinking");
+		$watingDom.fadeOut(300);
+		$watingDom.fadeIn(300);
+	}
+
+};
+var intervalo= setInterval(makeBlink.blinker, 1000);
