@@ -14,7 +14,7 @@ class usuarios(db.Model):
 		usuario= usuarios(username=name, password=pw_hashed, correo=email)
 		usuario.put()
 		user_id= usuario.key().id()
-		return user_id
+		return dict(id=user_id, username=name)
 
 	@classmethod
 	def buscar_usuario(cls, name):
