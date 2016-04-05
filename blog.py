@@ -64,6 +64,15 @@ class Handler(webapp2.RequestHandler):
 	def logout(self):
 		self.response.headers.add_header("Set-Cookie", "sesion=; Path=/")
 
+	def is_login(self):
+		cookie= self.cookie_valido("sesion")
+
+		if cookie:
+			return True
+		else:
+			return False
+
+
 def cachFront(update=False):
 	key="top"
 	entradas=memcache.get(key)
@@ -80,7 +89,8 @@ def cachFront(update=False):
 class MainHandler(Handler):
     def get(self):
     	entradas= cachFront()
-        self.render("index.html", entradas=entradas)
+    	self.render("index.html", entradas=entradas, login=self.is_login())
+    	
 
 
 class NewPostHandler(Handler):
@@ -138,33 +148,44 @@ class SignUpHandler(Handler):
 		contra_verificada= self.request.get("verify")
 		correo= self.request.get("correo")
 		bad_data=False
-		parametros=dict(badData=bad_data)
-		
-		if not validar_datos.usuario_valido(usuario):
-			bad_data=True
-
-		if not validar_datos.contra_valida(contra):
-			bad_data=True
-
-		elif contra_verificada!= contra:
-			bad_data=True
-
-		if not validar_datos.correo_valido(correo):
-			bad_data=True
+		parametros=list()
+		data=dict()
 
 		usuario_existe= usuarios.buscar_usuario(usuario)
 
 		if usuario_existe:
-			bad_data=True
-			parametros["user"]="This user already exist" 
+			data["user"]="This username already exist"
+			self.enviar_json(data)
 
-		if bad_data:
-			self.jsonEnviar(parametros)
 		else:
-			registrar= usuarios.registrar(usuario, contra, correo)
-			self.login(registrar)
 
-	def jsonEnviar(self, datos):
+			if not validar_datos.usuario_valido(usuario):
+				bad_data=True
+				parametros.append("username")
+
+			if not validar_datos.contra_valida(contra):
+				bad_data=True
+				parametros.append("a password")
+
+			elif contra_verificada!= contra:
+				bad_data=True
+				parametros.append("a password that match")
+
+			if not validar_datos.correo_valido(correo):
+				bad_data=True
+				parametros.append("an email")
+
+			if bad_data:
+				data["badData"]= True
+				data["errores"]=parametros
+				self.enviar_json(data)
+			else:
+				registrar= usuarios.registrar(usuario, contra, correo)
+				self.login(registrar.get("id"))
+				data["username"]= registrar.get("username")
+				self.enviar_json(data)
+
+	def enviar_json(self, datos):
 		data= json.dumps(datos)
 		self.response.write(data)
 
