@@ -52,7 +52,7 @@
 										<i class="fa fa-cog fa-fw"></i>Settings</a>
 									</li>
 									<li role="separator" class="divider"></li>
-									<li><a href="/logout">
+									<li><a href="/logout" id="logout">
 										<i class="fa fa-sign-out fa-fw"></i>Logout</a>
 									</li>
 								</ul>
@@ -100,14 +100,17 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 
 	<!--trying-->
+	{% if not login %}
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/formvalidation/0.6.1/js/formValidation.min.js"></script>
   	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/formvalidation/0.6.1/js/framework/bootstrap.min.js"></script>
   	<script type="text/javascript" src="estatico/js/helper_vars.js"></script>
   	<script type="text/javascript" src="estatico/js/validador.js"></script>
+  	{% endif %}
 	
 
 	<script type="text/javascript">
 		$(document).ready(function(){
+			{% if not login %}
 			validarForms();
 			$("#login").on("hidden.bs.modal", function(){
 				$("#loginForm").formValidation('resetForm', true);
@@ -115,6 +118,16 @@
 			$("#signup").on("hidden.bs.modal", function(){
 				$("#signupForm").formValidation("resetForm", true);
 			});
+			{% endif %}
+			{% if login %}
+			$("#logout").click(function(e){
+				e.preventDefault();
+				$.get("/logout", function(){
+					window.location.reload();
+				});
+			});
+
+			{% endif %}
 			
 			
 		});	
