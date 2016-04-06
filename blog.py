@@ -66,15 +66,29 @@ class Handler(webapp2.RequestHandler):
 
 	def is_login(self):
 		cookie= self.cookie_valido("sesion")
+		return cookie
 
-		if cookie:
-			return True
-		else:
-			return False
+	def who_login(self):
+		user_id= self.is_login()
+		if user_id:
+			username= self.get_memcache(user_id)
+			if username:
+				return username
+			else:
+				usuario= usuarios.get_by_id(int(user_id))
+				self.set_memcache(user_id, usuario.username)
+				return usuario.username
+
 
 	def enviar_json(self, datos):
 		data= json.dumps(datos)
 		self.response.write(data)
+
+	def set_memcache(self, key, value):
+		return memcache.set(key, value)
+
+	def get_memcache(self, key):
+		return memcache.get(key)
 
 
 def cachFront(update=False):
@@ -84,7 +98,7 @@ def cachFront(update=False):
 		logging.error("DB QUERY")
 		post= db.GqlQuery("select * from dbEntradas order by fecha_creacion desc limit 10")
 		entradas=list(post)
-		memcache.set(key, entradas)
+		set_memcache(key, entradas)
 	return entradas
 
 
@@ -93,17 +107,19 @@ def cachFront(update=False):
 class MainHandler(Handler):
     def get(self):
     	entradas= cachFront()
-    	self.render("index.html", entradas=entradas, login=self.is_login())
+    	self.render("index.html", entradas=entradas, login=self.is_login(), 
+    				username=self.who_login())
     	
 
 
 class NewPostHandler(Handler):
 
 	def renderizar(self, error="", titulo="", post=""):
-		self.render("entradas.html", titulo=titulo, post=post, error=error)
+		self.render("entradas.html", titulo=titulo, post=post, error=error, 
+					login=self.is_login())
 
 	def get(self):
-		self.render("entradas.html")
+		self.renderizar()
 
 	def post(self):
 		titulo= self.request.get("title")
@@ -117,7 +133,7 @@ class NewPostHandler(Handler):
 			time.sleep(1)
  			# bug de consistencia el cache se actializa antes de
  			# que se complete la transacion
-			memcache.set(postId, entrada)
+			self.set_memcache(postId, entrada)
 			cachFront(True)
 			self.redirect('/%s' %postId)
 
@@ -129,7 +145,7 @@ class NewPostHandler(Handler):
 
 class PostHandler(Handler):
 	def get(self, postId):
-		post=memcache.get(postId)
+		post=self.get_memcache(postId)
 
 		if post:
 			self.render_post(post)
@@ -137,11 +153,12 @@ class PostHandler(Handler):
 			post= dbEntradas.get_by_id(int(postId))
 			if not post:
 				self.redirect('/')
-			memcache.set(postId, post)
+			self.set_memcache(postId, post)
 			self.render_post(post)
 
 	def render_post(self, post):
-		self.render("post.html", post=post)
+		self.render("post.html", post=post, login=self.is_login(),
+					username=self.who_login())
 
 		
 
@@ -203,7 +220,11 @@ class LoginHandler(Handler):
 			self.enviar_json(data)
 		else:
 			data["error"]= "Username or Password not valid, try again"
-			self.enviar_json(data)		
+			self.enviar_json(data)
+
+class LogoutHandler(Handler):
+	def get(self):
+		self.logout()
 
 
 
@@ -213,5 +234,6 @@ app = webapp2.WSGIApplication([
     ("/newpost", NewPostHandler),
     ("/([0-9]+)", PostHandler),
     ("/signup", SignUpHandler),
-    ("/login", LoginHandler)
+    ("/login", LoginHandler),
+    ("/logout", LogoutHandler)
 ], debug=True)
