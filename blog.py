@@ -22,7 +22,7 @@ import time
 import json
 
 from basedatos.post_db import dbEntradas
-from basedatos.usuarios_db import usuarios
+from basedatos.usuarios_db import dbUsuarios
 
 from tools import cookies
 from tools import validar_datos
@@ -75,7 +75,7 @@ class Handler(webapp2.RequestHandler):
 			if username:
 				return username
 			else:
-				usuario= usuarios.get_by_id(int(user_id))
+				usuario= dbUsuarios.get_by_id(int(user_id))
 				self.set_memcache(user_id, usuario.username)
 				return usuario.username
 
@@ -98,7 +98,7 @@ def cachFront(update=False):
 		logging.error("DB QUERY")
 		post= db.GqlQuery("select * from dbEntradas order by fecha_creacion desc limit 10")
 		entradas=list(post)
-		set_memcache(key, entradas)
+		memcache.set(key, entradas)
 	return entradas
 
 
@@ -116,18 +116,23 @@ class NewPostHandler(Handler):
 
 	def renderizar(self, error="", titulo="", post=""):
 		self.render("entradas.html", titulo=titulo, post=post, error=error, 
-					login=self.is_login())
+					login=self.is_login(), username=self.who_login())
 
 	def get(self):
-		self.renderizar()
+		if self.is_login():
+			self.renderizar()
+		else:
+			self.render("404.html")
 
 	def post(self):
 		titulo= self.request.get("title")
 		topic= self.request.get("topic")
 		post= self.request.get("post")
+		username= self.who_login()
+		
 
 		if titulo and post  and (topic!="Choose one.."):
-			entrada= dbEntradas(title=titulo, post=post, topic=topic)
+			entrada= dbEntradas(title=titulo, post=post, topic=topic, user=username)
 			entrada.put()
 			postId= str(entrada.key().id())
 			time.sleep(1)
@@ -172,7 +177,7 @@ class SignUpHandler(Handler):
 		parametros=list()
 		data=dict()
 
-		usuario_existe= usuarios.buscar_usuario(usuario)
+		usuario_existe= dbUsuarios.buscar_usuario(usuario)
 
 		if usuario_existe:
 			data["user"]="This username already exist"
@@ -201,7 +206,7 @@ class SignUpHandler(Handler):
 				data["errores"]=parametros
 				self.enviar_json(data)
 			else:
-				registrar= usuarios.registrar(usuario, contra, correo)
+				registrar= dbUsuarios.registrar(usuario, contra, correo)
 				self.login(registrar.get("id"))
 				data["username"]= registrar.get("username")
 				self.enviar_json(data)
@@ -213,7 +218,7 @@ class LoginHandler(Handler):
 		password= self.request.get("password")
 		data=dict()
 
-		cuenta= usuarios.logear(username, password)
+		cuenta= dbUsuarios.logear(username, password)
 		if cuenta:
 			self.login(cuenta.get("id"))
 			data["username"]= cuenta.get("username")
