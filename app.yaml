@@ -4,10 +4,13 @@ runtime: python27
 api_version: 1
 threadsafe: yes
 
+error_handlers:
+- file: default_error.html
+
 handlers:
-- url: /blog\.ico
-  static_files: blog.ico
-  upload: blog\.ico
+- url: /favicon\.ico
+  static_files: favicon.ico
+  upload: favicon\.ico
 
 - url: /estatico
   static_dir: estatico
@@ -15,6 +18,8 @@ handlers:
 - url: .*
   script: blog.app
   secure: always
+
+
 
 libraries:
 - name: webapp2
