@@ -33,9 +33,33 @@
 						<a href="/newpost" class="btn btn-primary navbar-btn btn-sm">New Post <span class="glyphicon glyphicon-pencil"></span></a>
 					{% endif %}
 				</div>
-				<div class="navbar-collapse collapse" id="menu">
-					<ul class="nav navbar-nav navbar-right">
+				<div class="navbar-collapse collapse navbar-t" id="menu">
+					<ul class="nav navbar-nav navbar-right" role="navigation">
 						<li><a href="/">Home</a></li>
+						{% if login %}
+						<li>
+							<div class="btn-group">
+								
+								<button type="button" class="btn btn-default dropdown-toggle navbar-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									<i class="fa fa-user fa-fw"></i>{{username}}
+									<span class="caret"></span>
+								</button>
+								<ul class="dropdown-menu">
+									<li><a href="#">
+										<i class="fa fa-pencil-square-o fa-fw"></i>Admin Panel</a>
+									</li>
+									<li><a href="#">
+										<i class="fa fa-cog fa-fw"></i>Settings</a>
+									</li>
+									<li role="separator" class="divider"></li>
+									<li><a href="/logout">
+										<i class="fa fa-sign-out fa-fw"></i>Logout</a>
+									</li>
+								</ul>
+
+							</div>
+						</li>
+						{% endif %}
 						{% if not login %}
 							<li><a href="#" data-toggle="modal" data-target="#login">Log In</a></li>
 							<li><a href="#" data-toggle="modal" data-target="#signup">Sign Up</a></li>
@@ -59,7 +83,7 @@
 		{% endblock %}
 		
 	</div>
-	<footer class="fotter">
+	<footer class="footer">
 		<div class="container">
 			<hr>	
 			<p class="text-right col-xs-6">
