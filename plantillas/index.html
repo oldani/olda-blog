@@ -6,24 +6,77 @@
 				{% for cadaPost in entradas %}
 					<div class="row">
 						<div class="col-xs-10 col-xs-offset-1 col-md-12 col-md-offset-0">
-							
-							<h3><a class="text-uppercase links-post" href="/{{cadaPost.key().id()}}">{{cadaPost.title}}</a></h3>
-							
-							<hr>
-							<h6 class="text-right"><i class="fa fa-user"></i> {{cadaPost.user}} &nbsp<i class="fa fa-calendar"></i> {{cadaPost.fecha_creacion.strftime("%b-%d-%Y")}}</h6>
-							<p class="text-justify">{{cadaPost.post | safe}}</p>
-							
+							<div class="row">
+								<div class="col-xs-9">
+									<h3>
+										<a class="text-uppercase links-post text-left" href="/{{cadaPost.key().id()}}">{{cadaPost.title}}
+										</a>
+										
+									</h3>
+								</div>
+								<div class="col-xs-3">
+									<h5 class="text-right vertical-al-div"><i class="fa fa-bookmark fa-fw"></i>{{cadaPost.topic}}</h5>
+								</div>
+							</div>
+							<hr class="hr-post">
+							<div class="row>">
+								<h6 class="text-right">
+									<i class="fa fa-user"></i> {{cadaPost.user}} &nbsp
+									<i class="fa fa-calendar"></i> {{cadaPost.fecha_creacion.strftime("%b-%d-%Y")}}
+								</h6>
+								<div class="text-justify">
+									{{cadaPost.post |safe|truncate(1500, True)}}
+								</div>
+								{% if cadaPost.post|length >1500 %}
+								<a href="/{{cadaPost.key().id()}}">Continue reading...</a>
+								{% endif %}
+							</div>
 
 						</div>
 					</div>
 				{% endfor %}					
 			</section>
-
 		</div>
-		<div class="hidden-xs hidden-sm col-md-3 col-md-offset-1" style="background-color:red">
+		<div class="hidden-xs hidden-sm col-md-3 col-md-offset-1">
 			<aside>
-				<p>GEUl lh olh</p>
-				<h3>HOLAAA</h3>
+				<div class="row">
+					<div class="col-md-9 col-md-offset-1 margi-top">
+						<div class=" panel panel-info">
+							<div class="panel-heading">
+								<h5 class="panel-title">Filter by:</h5>
+							</div>
+							<div class="list-group">
+								<button type="button" class="list-group-item active">Recently</button>
+								<button type="button" class="list-group-item">Most Popular</button>
+								<button type="button" class="list-group-item" data-toggle="collapse" data-target="#topics">Topic</button>
+								<div class="collapse" id="topics"> 
+									<button type="button" class="list-group-item">Programing
+										<span class="badge">4</span>
+									</button>
+									<button type="button" class="list-group-item">Technology
+										<span class="badge">4</span>
+									</button>
+									<button type="button" class="list-group-item">Sciences
+										<span class="badge">4</span>
+									</button>
+									<button type="button" class="list-group-item">News
+										<span class="badge">4</span>
+									</button>
+									<button type="button" class="list-group-item">Culture
+										<span class="badge">4</span>
+									</button>
+									<button type="button" class="list-group-item">Games
+										<span class="badge">4</span>
+									</button>
+									<button type="button" class="list-group-item">Sports
+										<span class="badge">4</span>
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
 			</aside>			
 		</div>
 	</div>
