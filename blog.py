@@ -91,24 +91,23 @@ class Handler(webapp2.RequestHandler):
 		return memcache.get(key)
 
 
-def cachFront(update=False):
-	key="top"
-	entradas=memcache.get(key)
-	if entradas is None or update:
-		logging.error("DB QUERY")
-		post= db.GqlQuery("select * from dbEntradas order by fecha_creacion desc limit 10")
-		entradas=list(post)
-		memcache.set(key, entradas)
-	return entradas
+	def cachFront(self, key="", update=False):
+		entradas=memcache.get(key)
+		if entradas is None or update:
+			logging.error("DB QUERY")
+			post= db.GqlQuery("select * from dbEntradas order by fecha_creacion desc limit 10")
+			entradas=list(post)
+			memcache.set(key, entradas)
+		return entradas
 
 
 
 
 class MainHandler(Handler):
     def get(self):
-    	entradas= cachFront()
-    	self.render("index.html", entradas=entradas, login=self.is_login(), 
-    				username=self.who_login())
+    	entradas= self.cachFront(key="reciente")
+    	self.render("index.html", entradas=entradas,
+    				 login=self.is_login(), username=self.who_login())
     	
 
 
@@ -139,13 +138,16 @@ class NewPostHandler(Handler):
  			# bug de consistencia el cache se actializa antes de
  			# que se complete la transacion
 			self.set_memcache(postId, entrada)
-			cachFront(True)
+			self.cachFront(True, key="reciente")
 			self.redirect('/%s' %postId)
 
 
 		else:
 			error="We need a title, a topic and your post"
 			self.renderizar(error, titulo, post)
+
+
+		
 
 
 class PostHandler(Handler):

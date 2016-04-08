@@ -1,5 +1,5 @@
 application: olda-blog
-version: 2
+version: dev
 runtime: python27
 api_version: 1
 threadsafe: yes
