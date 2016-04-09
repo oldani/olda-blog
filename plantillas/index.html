@@ -9,7 +9,7 @@
 							<div class="row">
 								<div class="col-xs-9">
 									<h3>
-										<a class="text-uppercase links-post text-left" href="/{{cadaPost.key().id()}}">{{cadaPost.title}}
+										<a class="text-uppercase links-post text-left" href="/{{cadaPost.key.integer_id()}}">{{cadaPost.title}}
 										</a>
 										
 									</h3>
@@ -28,7 +28,7 @@
 									{{cadaPost.post |safe|truncate(1500, True)}}
 								</div>
 								{% if cadaPost.post|length >1500 %}
-								<a href="/{{cadaPost.key().id()}}">Continue reading...</a>
+								<a href="/{{cadaPost.key.integer_id()}}">Continue reading...</a>
 								{% endif %}
 							</div>
 
@@ -51,25 +51,25 @@
 								<button type="button" class="list-group-item" data-toggle="collapse" data-target="#topics">Topic</button>
 								<div class="collapse" id="topics"> 
 									<button type="button" class="list-group-item">Programing
-										<span class="badge">4</span>
+										<span class="badge">{{topics.Programing}}</span>
 									</button>
 									<button type="button" class="list-group-item">Technology
-										<span class="badge">4</span>
+										<span class="badge">{{topics.Technology}}</span>
 									</button>
 									<button type="button" class="list-group-item">Sciences
-										<span class="badge">4</span>
+										<span class="badge">{{topics.Science}}</span>
 									</button>
 									<button type="button" class="list-group-item">News
-										<span class="badge">4</span>
+										<span class="badge">{{topics.News}}</span>
 									</button>
 									<button type="button" class="list-group-item">Culture
-										<span class="badge">4</span>
+										<span class="badge">{{topics.Culture}}</span>
 									</button>
 									<button type="button" class="list-group-item">Games
-										<span class="badge">4</span>
+										<span class="badge">{{topics.Games}}</span>
 									</button>
 									<button type="button" class="list-group-item">Sports
-										<span class="badge">4</span>
+										<span class="badge">{{topics.Sports}}</span>
 									</button>
 								</div>
 							</div>

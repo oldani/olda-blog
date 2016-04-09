@@ -21,14 +21,14 @@ import logging
 import time
 import json
 
-from basedatos.post_db import dbEntradas
+from basedatos.post_db import *
 from basedatos.usuarios_db import dbUsuarios
 
 from tools import cookies
 from tools import validar_datos
 
 
-from google.appengine.ext import db
+from google.appengine.ext import ndb
 from google.appengine.api import memcache
 
 
@@ -95,7 +95,7 @@ class Handler(webapp2.RequestHandler):
 		entradas=memcache.get(key)
 		if entradas is None or update:
 			logging.error("DB QUERY")
-			post= db.GqlQuery("select * from dbEntradas order by fecha_creacion desc limit 10")
+			post= dbEntradas.query().order(-dbEntradas.fecha_creacion).fetch(10)
 			entradas=list(post)
 			memcache.set(key, entradas)
 		return entradas
@@ -106,7 +106,8 @@ class Handler(webapp2.RequestHandler):
 class MainHandler(Handler):
     def get(self):
     	entradas= self.cachFront(key="reciente")
-    	self.render("index.html", entradas=entradas,
+    	topics= topicsCantidad.get_by_id(6158364627173376)
+    	self.render("index.html", entradas=entradas, topics=topics.cantidad_topics,
     				 login=self.is_login(), username=self.who_login())
     	
 
@@ -133,12 +134,10 @@ class NewPostHandler(Handler):
 		if titulo and post  and (topic!="Choose one.."):
 			entrada= dbEntradas(title=titulo, post=post, topic=topic, user=username)
 			entrada.put()
-			postId= str(entrada.key().id())
-			time.sleep(1)
- 			# bug de consistencia el cache se actializa antes de
- 			# que se complete la transacion
+			postId= str(entrada.key.id())
 			self.set_memcache(postId, entrada)
-			self.cachFront(True, key="reciente")
+			self.cachFront(key="reciente", update=True)
+			topicsCantidad.actualizar_topics()
 			self.redirect('/%s' %postId)
 
 
