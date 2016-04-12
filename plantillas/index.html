@@ -46,29 +46,29 @@
 								<h5 class="panel-title">Filter by:</h5>
 							</div>
 							<div class="list-group">
-								<button type="button" class="list-group-item active">Recently</button>
-								<button type="button" class="list-group-item">Most Popular</button>
+								<button type="button" class="list-group-item active" data-filter="reciente">Recently</button>
+								<button type="button" class="list-group-item" data-filter="popular">Most Popular</button>
 								<button type="button" class="list-group-item" data-toggle="collapse" data-target="#topics">Topic</button>
 								<div class="collapse" id="topics"> 
-									<button type="button" class="list-group-item">Programing
+									<button type="button" class="list-group-item" data-filter="Programing">Programing
 										<span class="badge">{{topics.Programing}}</span>
 									</button>
-									<button type="button" class="list-group-item">Technology
+									<button type="button" class="list-group-item" data-filter="Technology">Technology
 										<span class="badge">{{topics.Technology}}</span>
 									</button>
-									<button type="button" class="list-group-item">Sciences
+									<button type="button" class="list-group-item" data-filter="Science">Science
 										<span class="badge">{{topics.Science}}</span>
 									</button>
-									<button type="button" class="list-group-item">News
+									<button type="button" class="list-group-item" data-filter="News">News
 										<span class="badge">{{topics.News}}</span>
 									</button>
-									<button type="button" class="list-group-item">Culture
+									<button type="button" class="list-group-item" data-filter="Culture">Culture
 										<span class="badge">{{topics.Culture}}</span>
 									</button>
-									<button type="button" class="list-group-item">Games
+									<button type="button" class="list-group-item" data-filter="Games">Games
 										<span class="badge">{{topics.Games}}</span>
 									</button>
-									<button type="button" class="list-group-item">Sports
+									<button type="button" class="list-group-item" data-filter="Sports">Sports
 										<span class="badge">{{topics.Sports}}</span>
 									</button>
 								</div>
@@ -80,5 +80,34 @@
 			</aside>			
 		</div>
 	</div>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$(".list-group").on("click", "button", function(){
+				data=$(this).data("filter")
+				var activeClass="active"
+				$(".active").removeClass(activeClass)
+				$(this).addClass(activeClass)
+				if (data) {
+					$.ajax({
+						url:"/filter",
+						method: "GET",
+						data: "filtro="+data,
+						dataType: "json",
+						success: function(data){
+							if (!data){
+								alert("Sorry we do not have any post about this topic yet, so why to not"+
+									     " make the first post about this!");
+							} else {
+								$("section").html(data);
+							};
+
+						},
+
+					});
+				};
+			});
+		});
+
+	</script>
 {% endblock %}
 		

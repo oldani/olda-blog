@@ -1,0 +1,32 @@
+{% for cadaPost in entradas %}
+	<div class="row">
+		<div class="col-xs-10 col-xs-offset-1 col-md-12 col-md-offset-0">
+			<div class="row">
+				<div class="col-xs-9">
+					<h3>
+						<a class="text-uppercase links-post text-left" href="/{{cadaPost.key.integer_id()}}">{{cadaPost.title}}
+						</a>
+						
+					</h3>
+				</div>
+				<div class="col-xs-3">
+					<h5 class="text-right vertical-al-div"><i class="fa fa-bookmark fa-fw"></i>{{cadaPost.topic}}</h5>
+				</div>
+			</div>
+			<hr class="hr-post">
+			<div class="row>">
+				<h6 class="text-right">
+					<i class="fa fa-user"></i> {{cadaPost.user}} &nbsp
+					<i class="fa fa-calendar"></i> {{cadaPost.fecha_creacion.strftime("%b-%d-%Y")}}
+				</h6>
+				<div class="text-justify">
+					{{cadaPost.post |safe|truncate(1500, True)}}
+				</div>
+				{% if cadaPost.post|length >1500 %}
+				<a href="/{{cadaPost.key.integer_id()}}">Continue reading...</a>
+				{% endif %}
+			</div>
+
+		</div>
+	</div>
+{% endfor %}

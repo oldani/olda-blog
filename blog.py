@@ -233,6 +233,15 @@ class LogoutHandler(Handler):
 		self.logout()
 
 
+class FilterHandler(Handler):
+	def get(self):
+		filtro= self.request.get("filtro")
+		if filtro=="reciente" :
+			lista_post= self.cachFront(key=filtro)
+		else:
+			lista_post= dbEntradas.query().filter(dbEntradas.topic==filtro).fetch()
+		a= self.render_string("postFiltro.html", entradas=lista_post)
+		self.enviar_json(a)
 
 
 app = webapp2.WSGIApplication([
@@ -241,5 +250,6 @@ app = webapp2.WSGIApplication([
     ("/([0-9]+)", PostHandler),
     ("/signup", SignUpHandler),
     ("/login", LoginHandler),
-    ("/logout", LogoutHandler)
+    ("/logout", LogoutHandler),
+    ("/filter", FilterHandler)
 ], debug=True)
