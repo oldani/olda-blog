@@ -1,7 +1,7 @@
-var wating= '<div class="row"><img class="img-responsive center-block"src="estatico/img/default.gif">\
+var wating= '<div class="row" id="wating"><img class="img-responsive center-block"src="estatico/img/default.gif">\
 <p class="blinking text-center">Loging in...</p></div>'
 
-var error= '<div class="row">\
+var error= '<div id="error"><div class="row">\
 				<div class="text-center">\
 					<i class="fa fa-close fa-5x fa-error"></i>\
 				</div>\
@@ -16,7 +16,7 @@ var cerrarError= ".</p></div></div></div>\
 				  <div class='row'>\
 					 <button type='button' class='btn btn-info center-block'>\
 					 Try Again</button>\
-				  </div>";
+				  </div></div>";
 
 var valid= "Please enter a valid ";
 

@@ -9,7 +9,7 @@ var validarForms= function(){
 					err: {
 						container: 'popover'
 					},
-					excluded: ":disabled, :hidden, :not(:visible)",
+					excluded: ":disabled",
 
 					icon: {
 						valid: 'glyphicon glyphicon-ok',
@@ -68,7 +68,7 @@ var validarForms= function(){
 					var $form= $(e.target);
 					var modal= $form.children(".modal-body");
 					var datos= $form.serialize();
-					var modalClonado= modal.children(".row").clone();
+					var modalRows= modal.children(".row");
 					
 					
 					
@@ -76,7 +76,8 @@ var validarForms= function(){
 						url: $form.attr("action"),
 						method: "POST",
 						beforeSend: function(){
-							modal.html(wating);
+							modalRows.hide();
+							modal.append(wating);
 							makeBlink.blinker();
 							intervalo;
 						},
@@ -84,14 +85,16 @@ var validarForms= function(){
 						dataType: "json",
 						success: function(data) {
 							if ("user" in data) {
-								modal.html(error+data.user+cerrarError);
+								$("#wating").remove()
+								modal.append(error+data.user+cerrarError);
 
 							} else if ("badData" in data) {
 								var built= $.map(data.errores, function(valor){
 									var errores= " "+valor
 									return errores
 								});
-								modal.html(error+valid+built+ cerrarError);	
+								$("#wating").remove()
+								modal.append(error+valid+built+ cerrarError);	
 							} else {
 								modal.html(success+data.username+"!"+cerrarSuccess);
 								window.location.reload();
@@ -99,7 +102,8 @@ var validarForms= function(){
 						}
 					});
 					$form.on("click", "button", function(){
-						modal.html(modalClonado);	
+						$("#error").remove();
+						modalRows.show();	
 						$form.find("#submit")
 								.removeClass("disabled")
 								.prop("disabled", false);
@@ -112,7 +116,7 @@ var validarForms= function(){
 						valid: "glyphicon glyphicon-ok",
 						invalid: "glyphicon glyphicon-remove"
 					},
-					excluded:":hidden, :not(:visible), :disabled",
+					excluded:":disabled",
 					fields:{
 						username:{
 							validators:{
@@ -135,24 +139,24 @@ var validarForms= function(){
 					var $form= $(e.target);
 					var modal= $form.children(".modal-body");
 					var data= $form.serialize();
-					var modalClonado= modal.children(".row").clone();
-					// var footer= $form.children(".modal-footer");
-					// var footerClonado= footer.children(".btn").detach();
+					var modalRows= modal.children(".row");
+
 
 					$.ajax({
 						url: $form.attr("action"),
 						method:"POST",
 						beforeSend: function(){
-							modal.html(wating);
+							modalRows.hide();
+							modal.append(wating);
 							makeBlink.blinker();
 							intervalo;
-							//footer.html("");
 						},
 						data:data,
 						dataType: "json",
 						success: function(data){
 							if ("error" in data) {
-								modal.html(error+data.error+cerrarError);
+								$("#wating").remove();
+								modal.append(error+data.error+cerrarError);
 							} else {
 								modal.html(success+data.username+cerrarSuccess);
 								window.location.reload();
@@ -161,8 +165,8 @@ var validarForms= function(){
 
 					});
 					$form.on("click", "button", function(){
-						modal.html(modalClonado);
-						// footer.html(footerClonado);
+						$("#error").remove();
+						modalRows.show();
 						$form.find("#submitLogin")
 											.removeClass("disabled")
 											.prop("disabled", false);
