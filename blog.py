@@ -95,8 +95,7 @@ class Handler(webapp2.RequestHandler):
 		entradas=memcache.get(key)
 		if entradas is None or update:
 			logging.error("DB QUERY")
-			post= dbEntradas.query().order(-dbEntradas.fecha_creacion).fetch(10)
-			entradas=list(post)
+			entradas=dbEntradas.post_recientes()
 			memcache.set(key, entradas)
 		return entradas
 
@@ -106,8 +105,8 @@ class Handler(webapp2.RequestHandler):
 class MainHandler(Handler):
     def get(self):
     	entradas= self.cachFront(key="reciente")
-    	topics= topicsCantidad.get_by_id(6158364627173376)
-    	self.render("index.html", entradas=entradas, topics=topics.cantidad_topics,
+    	topics= topicsCantidad.get_nTopics()
+    	self.render("index.html", entradas=entradas, topics=topics,
     				 login=self.is_login(), username=self.who_login())
     	
 
@@ -132,10 +131,12 @@ class NewPostHandler(Handler):
 		
 
 		if titulo and post  and (topic!="Choose one.."):
-			entrada= dbEntradas(title=titulo, post=post, topic=topic, user=username)
-			entrada.put()
+			#entrada= dbEntradas(title=titulo, post=post, topic=topic, user=username)
+			#entrada.put()
+			entrada= dbEntradas.guardar_post(titulo, post, topic, username)
 			postId= str(entrada.key.id())
 			self.set_memcache(postId, entrada)
+			#time.sleep(1)
 			self.cachFront(key="reciente", update=True)
 			topicsCantidad.actualizar_topics()
 			self.redirect('/%s' %postId)
@@ -156,7 +157,7 @@ class PostHandler(Handler):
 		if post:
 			self.render_post(post)
 		else:
-			post= dbEntradas.get_by_id(int(postId))
+			post= dbEntradas.get_post(postId)
 			if not post:
 				self.redirect('/')
 			self.set_memcache(postId, post)
@@ -165,6 +166,8 @@ class PostHandler(Handler):
 	def render_post(self, post):
 		self.render("post.html", post=post, login=self.is_login(),
 					username=self.who_login())
+
+	
 
 		
 
@@ -238,10 +241,13 @@ class FilterHandler(Handler):
 		filtro= self.request.get("filtro")
 		if filtro=="reciente" :
 			lista_post= self.cachFront(key=filtro)
+
+		elif filtro== "popular":
+			lista_post= dbEntradas.mas_populares()
 		else:
-			lista_post= dbEntradas.query().filter(dbEntradas.topic==filtro).fetch()
-		a= self.render_string("postFiltro.html", entradas=lista_post)
-		self.enviar_json(a)
+			lista_post= dbEntradas.post_by_filtro(filtro)
+		post= self.render_string("postFiltro.html", entradas=lista_post)
+		self.enviar_json(post)
 
 
 app = webapp2.WSGIApplication([
