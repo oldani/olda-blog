@@ -24,10 +24,75 @@
 							</h6>
 							<div class="text-justify">
 								{{post.post |safe}}
+								
 							</div>
 						</div>
 					</div>
 				</div>			
+			</section>
+			
+			<section>
+				<div class="row">
+
+
+					<div class="col-xs-10 col-xs-offset-1 col-md-12 col-md-offset-0">
+						<hr>
+						<div class="row">
+							<div class="col-xs-12">
+						
+								<h4>Comments:</h4>
+							</div>
+						</div>
+						<article style="background-color: #eee">
+							<div class="row">
+								<div class="col-xs-5 col-xs-offset-1">
+									<h5>
+										<strong>User said:</strong>
+									</h5>
+								</div>
+								<div class="col-xs-6  text-right">
+									<h5><strong>Subject:</strong> Whatever &nbsp</h5>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-11 col-xs-offset-1">
+									<p>Coment oiahfli siha fl hlaskhf las
+										alskhf lkahsf lksh lash flaskhf a
+										lkahsf lsakhf lakshf lkh ;l;qi f
+										;asifh;asihf ;isahf</p>
+								</div>
+							</div>
+						</article>
+						{% if login %}
+						<form id="formComentarios" method="post">
+							<div class="row">
+								<div class="col-xs-11 col-xs-offset-1 modal-col-xs-8 col-sm-6 col-md-6 form-group">
+									<label>Subject:</label>
+									<input type="text" name="subject" class="form-control">
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-11 col-xs-offset-1 form-group">
+									<label>Comment:</label>
+									
+									<textarea class="form-control" name="comentario" rows="3" placeholder="Write your comment here..."></textarea>
+
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-11 col-xs-offset-1">
+									<button type="submit" class="btn btn-primary">Submit</button>
+								</div>
+							</div>
+
+
+
+						</form>
+						{% endif %}
+					</div>
+					
+
+				</div>
 			</section>
 		</div>
 		<div class="hidden-xs hidden-sm col-md-3 col-md-offset-1" style="background-color:red">
@@ -37,4 +102,18 @@
 			</aside>			
 		</div>
 	</div>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("#formComentarios").submit(function(e){
+				e.preventDefault();
+				data= $(this).serialize();
+				$.ajax({
+					url: window.location.pathname,
+					method: "POST",
+					data:data
+				});
+			});
+
+		});
+	</script>
 {% endblock %}
