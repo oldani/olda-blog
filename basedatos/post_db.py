@@ -3,6 +3,13 @@ from google.appengine.api import memcache
 import logging
 
 
+class dbComentarios(ndb.Model):
+	usuario= ndb.StringProperty(required=True)
+	asunto= ndb.StringProperty(required=True)
+	comentario= ndb.TextProperty(required=True)
+	creado= ndb.DateTimeProperty(auto_now_add=True)
+
+
 def parent_post():
 	return ndb.Key("Blog", "post")
 
@@ -16,6 +23,7 @@ class dbEntradas(ndb.Model):
 	fecha_modificacion= ndb.DateTimeProperty(auto_now=True)
 	score= ndb.IntegerProperty(default=0)
 	status= ndb.BooleanProperty(default=True)
+	comentarios= ndb.StructuredProperty(dbComentarios, repeated=True)
 
 	
 		
@@ -29,7 +37,7 @@ class dbEntradas(ndb.Model):
 	@classmethod
 	def query_post(cls):
 		query= dbEntradas.query(ancestor=parent_post()).filter(
-									dbEntradas.status== True)
+								dbEntradas.status== True)
 		return query
 
 	@classmethod
@@ -44,7 +52,8 @@ class dbEntradas(ndb.Model):
 
 	@classmethod
 	def get_post(cls, post_id):
-		post= dbEntradas.get_by_id(int(post_id))
+		key= ndb.Key("dbEntradas", int(post_id), parent=parent_post())
+		post= key.get()
 		return post
 
 	@classmethod
