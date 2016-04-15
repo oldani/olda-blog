@@ -62,6 +62,16 @@ class dbEntradas(ndb.Model):
 				-dbEntradas.fecha_creacion).fetch()
 		return list(posts)
 
+	@classmethod
+	def guardar_comentario(cls, post_id, user, asunto, comentario):
+		post= cls.get_post(post_id)
+		post.score+=1
+		post.comentarios.append(dbComentarios(usuario=user,
+								asunto=asunto, comentario=comentario))
+		post.put()
+		memcache.set(post_id, post)
+		return post
+
 
 
 class topicsCantidad(ndb.Model):
