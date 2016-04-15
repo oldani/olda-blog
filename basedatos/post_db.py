@@ -73,11 +73,22 @@ class dbEntradas(ndb.Model):
 		return post
 
 
-
+id_entity=0
 class topicsCantidad(ndb.Model):
 	cantidad_topics= ndb.PickleProperty()
 	created= ndb.DateTimeProperty(auto_now_add=True)
 	last_modified= ndb.DateTimeProperty(auto_now=True)
+
+	@classmethod
+	def crear_entity(cls, cantidad):
+		total= topicsCantidad(cantidad_topics=cantidad)
+		total.put()
+	
+	@classmethod
+	def recuperar_key(cls):
+		key= topicsCantidad.query().fetch(1, keys_only=True)
+		if key:
+			return key[0].id()
 
 	@classmethod
 	def actualizar_topics(cls):
@@ -89,12 +100,18 @@ class topicsCantidad(ndb.Model):
 		for cadaTopic in topics:
 			cantidad+=1
 			total[cadaTopic.topic]+=1
-		topic= topicsCantidad.get_by_id(6158364627173376)
-		topic.cantidad_topics=total
-		topic.put()
+		key= cls.recuperar_key()
+		if key:
+			topic= topicsCantidad.get_by_id(key)
+			topic.cantidad_topics=total
+			topic.put()
+		else:
+			cls.crear_entity(total)
 
 	@classmethod
 	def get_nTopics(cls):
-		t= topicsCantidad.get_by_id(6158364627173376)
-		return t.cantidad_topics
+		key= cls.recuperar_key()
+		if key:
+			t= topicsCantidad.get_by_id(key)
+			return t.cantidad_topics
 		
