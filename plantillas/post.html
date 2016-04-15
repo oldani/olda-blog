@@ -39,56 +39,70 @@
 						<hr>
 						<div class="row">
 							<div class="col-xs-12">
-						
+								
 								<h4>Comments:</h4>
+
 							</div>
 						</div>
-						<article style="background-color: #eee">
-							<div class="row">
-								<div class="col-xs-5 col-xs-offset-1">
-									<h5>
-										<strong>User said:</strong>
-									</h5>
-								</div>
-								<div class="col-xs-6  text-right">
-									<h5><strong>Subject:</strong> Whatever &nbsp</h5>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-xs-11 col-xs-offset-1">
-									<p>Coment oiahfli siha fl hlaskhf las
-										alskhf lkahsf lksh lash flaskhf a
-										lkahsf lsakhf lakshf lkh ;l;qi f
-										;asifh;asihf ;isahf</p>
-								</div>
-							</div>
-						</article>
 						{% if login %}
-						<form id="formComentarios" method="post">
-							<div class="row">
-								<div class="col-xs-11 col-xs-offset-1 modal-col-xs-8 col-sm-6 col-md-6 form-group">
-									<label>Subject:</label>
-									<input type="text" name="subject" class="form-control">
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-xs-11 col-xs-offset-1 form-group">
-									<label>Comment:</label>
-									
-									<textarea class="form-control" name="comentario" rows="3" placeholder="Write your comment here..."></textarea>
+						<!-- Comment Form -->
+						<div class="well">
+							<h4>Leave a Comment:</h4>
+							<fieldset>
+								<form id="formComentarios" method="post">
+									<div class="row">
+										<div class="col-xs-11 col-xs-offset-1 modal-col-xs-8 col-sm-6 col-md-6 form-group">
+											<label>Subject:</label>
+											<input type="text" name="subject" class="form-control">
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-xs-11 col-xs-offset-1 form-group">
+											<label>Comment:</label>
+											
+											<textarea class="form-control" name="comentario" rows="3" placeholder="Write your comment here..."></textarea>
 
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-xs-11 col-xs-offset-1">
-									<button type="submit" class="btn btn-primary">Submit</button>
-								</div>
-							</div>
-
-
-
-						</form>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-xs-11 col-xs-offset-1">
+											<button type="submit" class="btn btn-primary">Submit</button>
+										</div>
+									</div>
+								</form>
+							</fieldset>
+						</div>
+						<!-- Finish Comment form -->
 						{% endif %}
+						<div class="container">
+							
+    						<div class="row" id="comentarios">
+    							{% for cadaComentario in post.comentarios|reverse %}
+		   							<div class="col-xs-12 col-sm-8 col-md-7">
+            							<div class="panel panel-white post panel-shadow">
+                							<div class="post-heading">
+                    							<div class="pull-left image">
+                        							<img src="estatico/img/user.jpg" class="img-circle avatar" alt="user profile image">
+                    							</div>
+                    							<div class="pull-left meta">
+                        							<div class="title h5">
+                            							<a href="#"><b>{{cadaComentario.usuario}}</b></a> made a comment.
+                        							</div>
+                        							<h6 class="text-muted time">{{cadaComentario.creado.strftime("%I:%M %p %b")}}</h6>
+                    							</div>
+                    							<div class="pull-right">
+                    								<b>Subject:</b> {{cadaComentario.asunto}}
+                    							</div>
+                							</div> 
+                							<div class="post-description"> 
+                    							<p>{{cadaComentario.comentario}}</p>
+                							</div>
+            							</div>
+        							</div>
+            					{% endfor %}
+        					</div>
+						</div>
+
 					</div>
 					
 
@@ -107,10 +121,25 @@
 			$("#formComentarios").submit(function(e){
 				e.preventDefault();
 				data= $(this).serialize();
+				var $field= $(this).closest("fieldset");
 				$.ajax({
 					url: window.location.pathname,
 					method: "POST",
-					data:data
+					data:data,
+					dataType: "json",
+					beforeSend: function(){
+						$field.prop("disabled", true);
+					},
+					success: function(data){
+						if ("error" in data) {
+							$field.append(errorComentario + data.error + cerrarComentario);
+						} else {
+							$("#comentarios").html(data.comentarios).fadeIn();
+						};
+					},
+					complete: function(){
+						$field.prop("disabled", false);
+					}
 				});
 			});
 
