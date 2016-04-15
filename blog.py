@@ -167,6 +167,33 @@ class PostHandler(Handler):
 		self.render("post.html", post=post, login=self.is_login(),
 					username=self.who_login())
 
+	def post(self, postId):
+		usuario= self.who_login()
+		asunto= self.request.get("subject")
+		comentario= self.request.get("comentario")
+		data=dict()
+
+		if usuario and asunto!="" and (len(comentario)>10): 
+			post= dbEntradas.guardar_comentario(postId, usuario,
+												asunto, comentario)
+		
+			if post:
+				comentarios= self.render_string("comentario.html", post=post)
+				data["comentarios"]=comentarios
+			else:
+				error="Sorry, try again please!"
+				data["error"]=error
+
+		else:
+			if len(comentario)<10:
+				error="Your comment must have a least 10 characters!"
+				data["error"]=error
+			else:
+				error="We need a subject and your comment, to save it!"
+				data["error"]=error
+		self.enviar_json(data)
+
+
 	
 
 		
