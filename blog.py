@@ -276,6 +276,9 @@ class FilterHandler(Handler):
 		post= self.render_string("postFiltro.html", entradas=lista_post)
 		self.enviar_json(post)
 
+class DashBoardHandler(Handler):
+	def get(self):
+		self.render("post_dashboard.html")
 
 app = webapp2.WSGIApplication([
     ('/?', MainHandler),
@@ -284,5 +287,6 @@ app = webapp2.WSGIApplication([
     ("/signup", SignUpHandler),
     ("/login", LoginHandler),
     ("/logout", LogoutHandler),
-    ("/filter", FilterHandler)
+    ("/filter", FilterHandler),
+    ("/dashboard", DashBoardHandler)
 ], debug=True)
