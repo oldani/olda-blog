@@ -278,7 +278,26 @@ class FilterHandler(Handler):
 
 class DashBoardHandler(Handler):
 	def get(self):
-		self.render("post_dashboard.html")
+		if self.is_login():
+			self.dashboard()
+		else:
+			self.render("404.html")
+
+	def dashboard(self):
+		usuario= self.who_login()
+		posts= dbEntradas.usuario_post(usuario)
+		self.render("post_dashboard.html", username=usuario,
+					posts= posts)
+
+	def post(self):
+		post_id= self.request.get("postid")
+		estado= self.request.get("status")
+		if estado=="true":
+			dbEntradas.status_post(post_id, True)
+		else:
+			dbEntradas.status_post(post_id, False)
+
+
 
 app = webapp2.WSGIApplication([
     ('/?', MainHandler),
