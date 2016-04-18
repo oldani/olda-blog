@@ -63,6 +63,24 @@ class dbEntradas(ndb.Model):
 		return list(posts)
 
 	@classmethod
+	def usuario_post(cls, usuario):
+		posts= dbEntradas.query(ancestor= parent_post()).filter(
+								dbEntradas.user == usuario).order(
+								-dbEntradas.fecha_creacion).fetch()
+		return list(posts)
+
+	@classmethod
+	def status_post(cls, post_id, status):
+		post= cls.get_post(post_id)
+		if status:
+			post.status= status
+		else:
+			post.status= status
+		post.put()
+		logging.error(post)
+		topicsCantidad.actualizar_topics()
+
+	@classmethod
 	def guardar_comentario(cls, post_id, user, asunto, comentario):
 		post= cls.get_post(post_id)
 		post.score+=1
@@ -92,7 +110,8 @@ class topicsCantidad(ndb.Model):
 
 	@classmethod
 	def actualizar_topics(cls):
-		topics= dbEntradas.query(ancestor=parent_post()).fetch(
+		topics= dbEntradas.query(ancestor=parent_post()).filter(
+								dbEntradas.status== True).fetch(
 									projection=[dbEntradas.topic])
 		cantidad=0
 		total= dict(Programing=0, Sports=0, Science=0, Culture=0, 
@@ -114,4 +133,5 @@ class topicsCantidad(ndb.Model):
 		if key:
 			t= topicsCantidad.get_by_id(key)
 			return t.cantidad_topics
-		
+		else:
+			cls.actualizar_topics()

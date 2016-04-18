@@ -53,6 +53,20 @@ indexes:
   properties:
   - name: status
   - name: topic
+
+- kind: dbEntradas
+  ancestor: yes
+  properties:
+  - name: status
+  - name: topic
+  - name: fecha_creacion
+    direction: desc
+
+- kind: dbEntradas
+  ancestor: yes
+  properties:
+  - name: status
+  - name: user
   - name: fecha_creacion
     direction: desc
 
@@ -60,3 +74,10 @@ indexes:
   ancestor: yes
   properties:
   - name: topic
+
+- kind: dbEntradas
+  ancestor: yes
+  properties:
+  - name: user
+  - name: fecha_creacion
+    direction: desc
