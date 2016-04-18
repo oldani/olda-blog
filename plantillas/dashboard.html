@@ -55,7 +55,7 @@
                         </div>
                         <div class="profile_info">
                             <span>Welcome,</span>
-                            <h2>oldani24</h2>
+                            <h2>{{username}}</h2>
                         </div>
                     </div>
                     <!-- /menu prile quick info -->
@@ -101,7 +101,7 @@
                         <ul class="nav navbar-nav navbar-right">
                             <li>
                                 <a href="#" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                    <img src="estatico/img/user.jpg" alt="">oldani24
+                                    <img src="estatico/img/user.jpg" alt="">{{username}}
                                     <span class="caret"></span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-usermenu pull-right">
@@ -136,6 +136,10 @@
     <!-- <script src="estatico/js/progressbar/bootstrap-progressbar.min.js"></script> -->
    
     <script src="estatico/js/custom.js"></script>
-
+    <script type="text/javascript">
+        $(document).ready(function(){
+            cambiarStatus();
+        });
+    </script>
 </body>
 </html>

@@ -48,3 +48,57 @@ $(window).resize(function () {
     $(".right_col").css("min-height", $(window).height());
 });
 
+// Sidebar finish
+
+var $ajaxFun= function(data, successFun){
+    $.ajax({
+        url: "/dashboard",
+        method: "POST",
+        data: data,
+        success: function(){
+            successFun;
+        }
+
+    })
+};
+
+var successStatus= {
+    habilitarPost: function($postRow, $this){
+        $postRow.removeClass("deshabilitar");
+        $this
+            .removeClass("habilitar-post")
+            .children("span").text("Disable");
+    },
+    deshabilitarPost: function($postRow, $this){
+        $postRow.addClass("deshabilitar");
+        $this
+            .addClass("habilitar-post")
+            .children("span").text("Enable");
+    }
+}
+
+var cambiarStatus= function(){
+    
+    $(".status").on("click", function(){
+        var $this, $postRow, postId, successFun, data,
+            $habilitarPostClass;
+
+        $this= $(this);
+        $postRow= $this.closest(".x_panel")
+        postId= $postRow.find("h2>a").attr("href");
+        $habilitarPostClass= $this.hasClass("habilitar-post");
+
+        if ($habilitarPostClass){
+            successFun= successStatus.habilitarPost($postRow, $this)
+            data= "status=true"+"&postid="+postId;
+
+        } else {
+            successFun= successStatus.deshabilitarPost($postRow, $this);
+            data= "status=false"+"&postid="+postId;
+        }
+
+        $ajaxFun(data, successFun);
+    });
+};
+
+

@@ -201,3 +201,13 @@ body{
 .post .post-footer .comments-list .comment > .comments-list {
   margin-left: 50px;
 }
+
+/*dashboard post*/
+
+.deshabilitar {
+  opacity: 0.6;
+}
+.habilitar-post {
+  color: #85db18;
+  font-weight: 600;
+}

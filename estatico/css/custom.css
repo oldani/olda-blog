@@ -647,7 +647,7 @@ li.current-page a {
 }
 .panel_toolbox>li>a {
   padding: 5px;
-  color: #C5C7CB;
+  /*color: #C5C7CB;*/
   font-size: 14px;
 }
 .panel_toolbox>li>a:hover {
@@ -843,9 +843,9 @@ h2 {
 .x_title h2 small {
   margin-left: 10px;
 }
-.x_title span {
+/*.x_title span {
   color: #BDBDBD;
-}
+}*/
 .x_content {
   padding: 0 5px 6px;
   position: relative;
