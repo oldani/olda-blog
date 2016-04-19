@@ -41,6 +41,11 @@ class dbEntradas(ndb.Model):
 		return query
 
 	@classmethod
+	def key_post(cls, post_id):
+		key= ndb.Key("dbEntradas", int(post_id), parent=parent_post())
+		return key
+
+	@classmethod
 	def post_recientes(cls):
 		posts= cls.query_post().order(-dbEntradas.fecha_creacion).fetch(10)	
 		return list(posts)
@@ -52,7 +57,7 @@ class dbEntradas(ndb.Model):
 
 	@classmethod
 	def get_post(cls, post_id):
-		key= ndb.Key("dbEntradas", int(post_id), parent=parent_post())
+		key= cls.key_post(post_id)
 		post= key.get()
 		return post
 
@@ -77,7 +82,6 @@ class dbEntradas(ndb.Model):
 		else:
 			post.status= status
 		post.put()
-		logging.error(post)
 		topicsCantidad.actualizar_topics()
 
 	@classmethod
@@ -90,6 +94,10 @@ class dbEntradas(ndb.Model):
 		memcache.set(post_id, post)
 		return post
 
+	@classmethod
+	def delete_post(cls, post_id):
+		key= cls.key_post(post_id)
+		key.delete()
 
 id_entity=0
 class topicsCantidad(ndb.Model):
