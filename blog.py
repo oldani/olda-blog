@@ -290,13 +290,18 @@ class DashBoardHandler(Handler):
 					posts= posts)
 
 	def post(self):
+		accion_a_tomar= self.request.get("accion")
 		post_id= self.request.get("postid")
 		estado= self.request.get("status")
-		if estado=="true":
-			dbEntradas.status_post(post_id, True)
-		else:
-			dbEntradas.status_post(post_id, False)
+		logging.error(accion_a_tomar)
 
+		if accion_a_tomar=="cambiarEstado":
+			if estado=="true":
+				dbEntradas.status_post(post_id, True)
+			else:
+				dbEntradas.status_post(post_id, False)
+		elif accion_a_tomar=="delete":
+			dbEntradas.delete_post(post_id)
 
 
 app = webapp2.WSGIApplication([
