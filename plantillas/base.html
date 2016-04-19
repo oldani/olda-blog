@@ -106,6 +106,7 @@
 	<script type="text/javascript">
 		$(document).ready(function(){
 			{% if not login %}
+
 			validarForms();
 			$("#login").on("hidden.bs.modal", function(){
 				$("#loginForm").formValidation('resetForm', true);
@@ -113,7 +114,9 @@
 			$("#signup").on("hidden.bs.modal", function(){
 				$("#signupForm").formValidation("resetForm", true);
 			});
+
 			{% endif %}
+			
 			{% if login %}
 			$("#logout").click(function(e){
 				e.preventDefault();

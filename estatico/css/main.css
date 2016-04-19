@@ -211,3 +211,8 @@ body{
   color: #85db18;
   font-weight: 600;
 }
+
+/*botones redondos*/
+.btn-circle {
+  border-radius: 50px;
+}

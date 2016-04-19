@@ -53,3 +53,19 @@ errorComentario= //'<div class="row">\
 								<span aria-hidden="true">&times;</span>\
 							</button>';
 cerrarComentario='</div>';//</div>';//</div>';
+
+// comfirm delte message
+
+var confirmDelete= '<div class="row" style="padding: 40px 20px;">\
+    					<div class="col-xs-12">\
+      						<h5 class="text-center">\
+      							Are you sure you want to delete this post?\
+      						</h5>\
+    					</div>\
+  						<div class="col-xs-12 text-center">\
+      						<button class="btn btn-danger btn-circle">Yes\
+      						</button>\
+      						<button class="btn btn-default btn-circle">No\
+      						</button>\
+    					</div>\
+  					</div>'

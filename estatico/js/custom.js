@@ -50,11 +50,14 @@ $(window).resize(function () {
 
 // Sidebar finish
 
-var $ajaxFun= function(data, successFun){
+// Panel toolbox Edit, Enable/Disable, Deletexff3
+var $ajaxFun= function(data, successFun=null, before= null){
+    console.log(before);
     $.ajax({
         url: "/dashboard",
         method: "POST",
         data: data,
+        beforeSend: before,
         success: function(){
             successFun;
         }
@@ -79,7 +82,7 @@ var successStatus= {
 
 var cambiarStatus= function(){
     
-    $(".status").on("click", function(){
+    $(".x_panel").on("click",".status", function(){
         var $this, $postRow, postId, successFun, data,
             $habilitarPostClass;
 
@@ -87,18 +90,56 @@ var cambiarStatus= function(){
         $postRow= $this.closest(".x_panel")
         postId= $postRow.find("h2>a").attr("href");
         $habilitarPostClass= $this.hasClass("habilitar-post");
-
+        data= "accion=cambiarEstado&postid="+postId;
         if ($habilitarPostClass){
             successFun= successStatus.habilitarPost($postRow, $this)
-            data= "status=true"+"&postid="+postId;
+            data= data + "&status=true";
 
         } else {
             successFun= successStatus.deshabilitarPost($postRow, $this);
-            data= "status=false"+"&postid="+postId;
+            data= data + "&status=false";
         }
 
         $ajaxFun(data, successFun);
     });
 };
 
+var deleteAjaxFun= {
+    beforeSend: function(){
 
+    },
+    successFun: function(){
+
+    }
+};
+
+var deletePost= function(){
+    $(".x_panel").on("click",".delete-post",function(){
+        var $this= $(this);
+        var $postRow= $this.closest(".x_panel");
+        var postId= $postRow.find("h2>a").attr("href");
+        var row
+        var post= $postRow.fadeOut(function(){
+            row= $(this).children().detach();
+            $(this).hide().html(confirmDelete).fadeIn();
+            return row
+        });
+
+
+        $($postRow).on("click", "button", function(){
+            if ($(this).hasClass("btn-danger")){
+                var data= "accion=delete&postid="+postId;
+                $ajaxFun(data);
+                $postRow.closest(".row").fadeOut(function(){
+                    $(this).remove();
+                });
+            } else {
+                $postRow.fadeOut(function(){
+                    $(this).hide().html(row).fadeIn();
+                });
+                
+            };
+        });
+
+    });
+};
