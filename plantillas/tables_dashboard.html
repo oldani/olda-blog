@@ -1,0 +1,96 @@
+
+<div class="contenido">
+    <div class="page-title">
+        <div class="title_left">
+            <h2>Post Statistics
+                <small>Here you can find a brief statics of yours posts!</small>
+            </h2>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <!--Star row-->
+    <div class="row">
+        <div class="col-xs-offset-1 col-xs-10 col-md-10 col-md-offset-1">
+            <div class="x_panel">
+                <div class="x_title">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <h2 class="text-uppercase">
+                            	5 Most Commented Post
+                            </h2>
+                        </div>
+                    </div>
+
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <!-- <div id="mainb" style="height:350px;"></div> -->
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Title</th>
+                                <th class="hidden-xs">Topic</th>
+                                <th>Coments</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for cadaPost in popular_post %}
+                            <tr>
+                                <th scope="row">{{loop.index}}</th>
+                                <td>{{cadaPost.title|truncate(10, True)}}</td>
+                                <td class="hidden-xs">{{cadaPost.topic}}</td>
+                                <td>{{cadaPost.score}}</td>
+                               
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--finish row-->
+    <!--Star row-->
+    <div class="row">
+        <div class="col-xs-offset-1 col-xs-10 col-md-10 col-md-offset-1">
+            <div class="x_panel">
+                <div class="x_title">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <h2 class="text-uppercase">
+                                Popular Topics
+                            </h2>
+                        </div>
+                    </div>
+
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Topic</th>
+                                <th>Score</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for key, valor in popularidad_topic|dictsort(true, "value")|reverse %}
+                            <tr>
+                                <th scope="row">{{loop.index}}</th>
+                                <td>{{key}}</td>
+                                <td>{{valor}}</td>
+                               
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--finish row-->
+</div>
+<!-- footer content -->
+<!-- /footer content -->

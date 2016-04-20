@@ -170,8 +170,12 @@ body.nav-md .container.body .col-md-3.left_col {
   position: absolute;
   display: flex;
 }
-body .container.body .right_col {
+/*body .container.body .right_col {
   background: #F7F7F7;
+}*/
+
+.right_col {
+  background: #f7f7f7;
 }
 body.nav-md .container.body .right_col {
   padding: 10px 20px 0;
@@ -198,6 +202,7 @@ body.nav-md .container.body .right_col {
   }
   .right_col {
     padding: 10px !important;
+    background: #F7F7F7;
   }
 }
 @media (max-width: 1200px) {

@@ -216,3 +216,7 @@ body{
 .btn-circle {
   border-radius: 50px;
 }
+
+.cargando {
+  background: url(../img/Preloader_3.gif) center no-repeat #fff;
+}
