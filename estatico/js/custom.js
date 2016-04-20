@@ -50,16 +50,19 @@ $(window).resize(function () {
 
 // Sidebar finish
 
+//Post Page
 // Panel toolbox Edit, Enable/Disable, Deletexff3
-var $ajaxFun= function(data, successFun=null, before= null){
-    console.log(before);
+var $ajaxFun= function(opciones){
     $.ajax({
-        url: "/dashboard",
-        method: "POST",
-        data: data,
-        beforeSend: before,
-        success: function(){
-            successFun;
+        url: opciones.url,
+        method: opciones.metodo,
+        data: opciones.data,
+        dataType: "json",
+        beforeSend:function(){
+            opciones.before();
+        },
+        success: function(data){
+            opciones.successFun(data);
         }
 
     })
@@ -100,7 +103,9 @@ var cambiarStatus= function(){
             data= data + "&status=false";
         }
 
-        $ajaxFun(data, successFun);
+        var opciones= {data:data, successFun:successFun, url:"/dashboard",
+                        metodo:"POST"}
+        $ajaxFun(opciones);
     });
 };
 
@@ -119,9 +124,9 @@ var deletePost= function(){
         var $postRow= $this.closest(".x_panel");
         var postId= $postRow.find("h2>a").attr("href");
         var row
-        var post= $postRow.fadeOut(function(){
+        var post= $postRow.slideUp("fast", function(){
             row= $(this).children().detach();
-            $(this).hide().html(confirmDelete).fadeIn();
+            $(this).hide().html(confirmDelete).slideDown("fast");
             return row
         });
 
@@ -135,11 +140,39 @@ var deletePost= function(){
                 });
             } else {
                 $postRow.fadeOut(function(){
-                    $(this).hide().html(row).fadeIn();
+                    $(this).hide().html(row).slideDown("fast");
                 });
                 
             };
         });
 
+    });
+};
+
+
+//Tables page
+var ajaxObjs= {
+    before: function(){
+        $(".right_col")
+                    .addClass("cargando")
+                    .children().remove();
+    },
+    successFun: function(data){
+        $(".right_col")
+                    .removeClass("cargando")
+                    .hide().html(data).fadeIn();
+    }
+};
+
+var sideBar= function(){
+
+    $("#sidebar-menu").on("click",".sideBar-ajax", function(){
+        var $this, data, opciones;
+        $this= $(this);
+        data= "page="+ $this.data("request");
+        opciones= {url:"/estadisticas", metodo:"GET", data:data,
+                    before:ajaxObjs.before, successFun:ajaxObjs.successFun}
+        
+        $ajaxFun(opciones);
     });
 };
