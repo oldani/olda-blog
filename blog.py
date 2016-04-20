@@ -285,7 +285,7 @@ class DashBoardHandler(Handler):
 
 	def dashboard(self):
 		usuario= self.who_login()
-		posts= dbEntradas.usuario_post(usuario)
+		posts= dbEntradas.usuario_post(usuario, "creacion")
 		self.render("post_dashboard.html", username=usuario,
 					posts= posts)
 
@@ -303,6 +303,23 @@ class DashBoardHandler(Handler):
 		elif accion_a_tomar=="delete":
 			dbEntradas.delete_post(post_id)
 
+class EstadisticasHandler(Handler):
+	def get(self):
+		pagina= self.request.get("page")
+		usuario= self.who_login()
+
+		if pagina== "tables":
+			posts= dbEntradas.usuario_post(usuario, "score")
+			popularidad_topic = dict(Programing=0, Sports=0, Science=0, 
+								Culture=0, Games=0, News=0, Technology=0)
+
+			for cadaPost in posts:
+				popularidad_topic[cadaPost.topic]+=cadaPost.score
+			
+			t= self.render_string("tables_dashboard.html",
+									popular_post=posts[:5], 
+									popularidad_topic=popularidad_topic)
+			self.enviar_json(t)
 
 app = webapp2.WSGIApplication([
     ('/?', MainHandler),
@@ -312,5 +329,6 @@ app = webapp2.WSGIApplication([
     ("/login", LoginHandler),
     ("/logout", LogoutHandler),
     ("/filter", FilterHandler),
-    ("/dashboard", DashBoardHandler)
+    ("/dashboard", DashBoardHandler),
+    ("/estadisticas", EstadisticasHandler)
 ], debug=True)
