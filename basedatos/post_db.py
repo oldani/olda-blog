@@ -68,10 +68,15 @@ class dbEntradas(ndb.Model):
 		return list(posts)
 
 	@classmethod
-	def usuario_post(cls, usuario):
+	def usuario_post(cls, usuario, order_by):
+		ordenar=None
+		if order_by == "creacion":
+			ordenar = -dbEntradas.fecha_creacion
+		elif order_by == "score":
+			ordenar= -dbEntradas.score
 		posts= dbEntradas.query(ancestor= parent_post()).filter(
 								dbEntradas.user == usuario).order(
-								-dbEntradas.fecha_creacion).fetch()
+								ordenar).fetch()
 		return list(posts)
 
 	@classmethod
