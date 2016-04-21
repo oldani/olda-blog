@@ -128,7 +128,8 @@ var deletePost= function(){
         $($postRow).on("click", "button", function(){
             if ($(this).hasClass("btn-danger")){
                 var data= "accion=delete&postid="+postId;
-                $ajaxFun(data);
+                opciones={ data:data, metodo: "POST", url:"/dashboard"};
+                $ajaxFun(opciones);
                 $postRow.closest(".row").fadeOut(function(){
                     $(this).remove();
                 });
