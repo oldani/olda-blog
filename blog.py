@@ -18,7 +18,6 @@ import webapp2
 import jinja2
 import os
 import logging
-import time
 import json
 
 from basedatos.post_db import *
@@ -132,21 +131,17 @@ class NewPostHandler(Handler):
 			self.renderizar(error, titulo, post)
 
 
-		
-
 
 class PostHandler(Handler):
 	def get(self, postId):
-		post=self.get_memcache(postId)
-
+		usuario= self.who_login()
+		post= dbEntradas.get_post(postId)
 		if post:
+			if not post.status and usuario != post.user:
+				self.render("404.html")
 			self.render_post(post)
-		else:
-			post= dbEntradas.get_post(postId)
-			if not post:
-				self.redirect('/')
-			self.set_memcache(postId, post)
-			self.render_post(post)
+		
+		self.render("404.html")
 
 	def render_post(self, post):
 		self.render("post.html", post=post, login=self.is_login(),
@@ -278,7 +273,6 @@ class DashBoardHandler(Handler):
 		accion_a_tomar= self.request.get("accion")
 		post_id= self.request.get("postid")
 		estado= self.request.get("status")
-		logging.error(accion_a_tomar)
 
 		if accion_a_tomar=="cambiarEstado":
 			if estado=="true":
@@ -332,6 +326,7 @@ class EditarPostHandler(Handler):
 		post_db= self.get_post(post_id)
 		post_db.post= post
 		post_db.put()
+		dbEntradas.post_recientes(update=True)
 		self.enviar_json("a")
 
 	def get_post(self, post_id):

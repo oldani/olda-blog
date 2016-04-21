@@ -56,8 +56,7 @@ class dbEntradas(ndb.Model):
 			posts= cls.query_post().order(-dbEntradas.fecha_creacion
 											).fetch(10)
 			entradas=list(posts)
-			memcache.set(key, entradas)
-			logging.error("DBQuery")	
+			memcache.set(key, entradas)	
 		return entradas
 
 	@classmethod
@@ -67,8 +66,12 @@ class dbEntradas(ndb.Model):
 
 	@classmethod
 	def get_post(cls, post_id):
-		key= cls.key_post(post_id)
-		post= key.get()
+		post = memcache.get(post_id)
+
+		if post is None:
+			key= cls.key_post(post_id)
+			post= key.get()
+			memcache.set(post_id, post)
 		return post
 
 	@classmethod
