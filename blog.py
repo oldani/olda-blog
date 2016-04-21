@@ -336,6 +336,26 @@ class EstadisticasHandler(Handler):
 		self.enviar_json(t)
 
 
+class EditarPostHandler(Handler):
+	def get(self, post_id):
+		post= self.get_post(post_id)
+		t= self.render_string("editar_post.html", post=post)
+		self.enviar_json(t)
+
+	def post(self, post_id):
+		post= self.request.get("post")
+		post_db= self.get_post(post_id)
+		post_db.post= post
+		post_db.put()
+		self.enviar_json("a")
+
+	def get_post(self, post_id):
+		post= dbEntradas.get_post(post_id)
+		return post
+
+
+
+
 app = webapp2.WSGIApplication([
     ('/?', MainHandler),
     ("/newpost", NewPostHandler),
@@ -345,5 +365,6 @@ app = webapp2.WSGIApplication([
     ("/logout", LogoutHandler),
     ("/filter", FilterHandler),
     ("/dashboard", DashBoardHandler),
-    ("/estadisticas", EstadisticasHandler)
+    ("/estadisticas", EstadisticasHandler),
+    ("/edit/([0-9]+)", EditarPostHandler)
 ], debug=True)
