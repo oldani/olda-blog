@@ -327,6 +327,7 @@ class EditarPostHandler(Handler):
 		post_db.post= post
 		post_db.put()
 		dbEntradas.post_recientes(update=True)
+		dbEntradas.get_post(post_id, update=True)
 		self.enviar_json("a")
 
 	def get_post(self, post_id):

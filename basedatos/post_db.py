@@ -65,10 +65,10 @@ class dbEntradas(ndb.Model):
 		return list(posts)
 
 	@classmethod
-	def get_post(cls, post_id):
+	def get_post(cls, post_id, update=False):
 		post = memcache.get(post_id)
 
-		if post is None:
+		if post is None or update:
 			key= cls.key_post(post_id)
 			post= key.get()
 			memcache.set(post_id, post)
