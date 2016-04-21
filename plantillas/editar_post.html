@@ -1,0 +1,77 @@
+
+
+<div class="contenido">
+    <div class="page-title">
+        <div class="title_left">
+            <h2>Edit Area
+                <small>Here you can edit your post content</small>
+            </h2>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <!--Star row-->
+    <div class="row">
+        <div class="col-xs-offset-1 col-xs-10 col-md-10 col-md-offset-1">
+            <div class="x_panel">
+                <div class="x_title">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6 col-sm-push-6 col-lg-4 col-lg-push-8 text-right">
+                            <i class="fa fa-bookmark fa-fw"></i>
+                            <span>{{post.topic}}</span>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-sm-pull-6 col-lg-8 col-lg-pull-4">
+                            <h2 class="text-uppercase">
+                            	{{post.title}}	
+                            </h2>
+                        </div>
+                    </div>
+
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <form id="formEditar" action="/edit/{{post.key.id()}}">
+                        <div class="row">
+                            <div class="form-group col-xs-12">
+                                <textarea name="post" class="form-control" rows="10">
+                                    {{post.post}}
+                                </textarea>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-info">Save Change</button>
+                        <a class="btn btn-default"href="/dashboard">Cancel</a>
+                    </form>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--finish row-->
+</div>
+<script type="text/javascript">
+    $(document).ready(function(){
+        submitChange();
+
+        tinymce.remove();
+        tinymce.init({ 
+            selector: 'textarea',
+            height: 500,
+            plugins: [
+                'advlist autolink lists charmap print preview anchor',
+                'searchreplace code',
+                'insertdatetime table contextmenu paste code'
+            ],
+            toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent',
+            content_css: [
+                '//fast.fonts.net/cssapi/e6dc9b99-64fe-4292-ad98-6974f93cd2a2.css',
+                 '//www.tinymce.com/css/codepen.min.css'
+            ],
+            element_format : 'html',
+            menubar: false,
+            statusbar: false,
+            invalid_elements:"img"
+        });
+
+    });
+</script>
+

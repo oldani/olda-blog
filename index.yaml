@@ -81,3 +81,10 @@ indexes:
   - name: user
   - name: fecha_creacion
     direction: desc
+
+- kind: dbEntradas
+  ancestor: yes
+  properties:
+  - name: user
+  - name: score
+    direction: desc

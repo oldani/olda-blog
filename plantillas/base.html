@@ -47,8 +47,8 @@
 									<li><a href="#">
 										<i class="fa fa-cog fa-fw"></i>Settings</a>
 									</li>
-									<li role="separator" class="divider"></li>
-									<li><a href="/logout" id="logout">
+									<li role="separator" class="divider logout"></li>
+									<li><a href="/logout">
 										<i class="fa fa-sign-out fa-fw"></i>Logout</a>
 									</li>
 								</ul>
@@ -118,7 +118,7 @@
 			{% endif %}
 			
 			{% if login %}
-			$("#logout").click(function(e){
+			$(".logout").click(function(e){
 				e.preventDefault();
 				$.get("/logout", function(){
 					window.location.reload();

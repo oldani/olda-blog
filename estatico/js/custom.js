@@ -68,6 +68,7 @@ var $ajaxFun= function(opciones){
     })
 };
 
+//Habilitar y Deshabilitar Post
 var successStatus= {
     habilitarPost: function($postRow, $this){
         $postRow.removeClass("deshabilitar");
@@ -94,6 +95,7 @@ var cambiarStatus= function(){
         postId= $postRow.find("h2>a").attr("href");
         $habilitarPostClass= $this.hasClass("habilitar-post");
         data= "accion=cambiarEstado&postid="+postId;
+
         if ($habilitarPostClass){
             successFun= successStatus.habilitarPost($postRow, $this)
             data= data + "&status=true";
@@ -109,15 +111,7 @@ var cambiarStatus= function(){
     });
 };
 
-var deleteAjaxFun= {
-    beforeSend: function(){
-
-    },
-    successFun: function(){
-
-    }
-};
-
+//Eliminar un post
 var deletePost= function(){
     $(".x_panel").on("click",".delete-post",function(){
         var $this= $(this);
@@ -149,8 +143,46 @@ var deletePost= function(){
     });
 };
 
+//Editar un post
+var editarPost= function(){
+    $(".x_panel").on("click",".editar",function(){
+        console.log("hi");
+        var $this= $(this);
+        var $postRow= $this.closest(".x_panel");
+        var postId= $postRow.find("h2>a").attr("href");
+        var opciones= {url: "/edit/"+postId, method:"GET",
+            before:ajaxObjs.before(), successFun:ajaxObjs.successFun};
+        $ajaxFun(opciones)
+    });
 
-//Tables page
+};
+
+var submitChange= function(){
+    $("#formEditar").submit(function(e){
+        e.preventDefault();
+        tinyMCE.triggerSave();
+        var $this, $field;
+        $this= $(this);
+        data= $this.serialize();
+        $field= $this.closest("fieldset");
+
+        $.ajax({
+            url: $this.attr("action"),
+            method: "POST",
+            data:data,
+            dataType: "json",
+            beforeSend: function(){
+                ajaxObjs.before();
+            },
+            success: function(data){
+                window.location.reload();
+            }
+        });
+    });
+};
+
+
+//SideBar page via ajax, ya sea post, tables o charts
 var ajaxObjs= {
     before: function(){
         $(".right_col")
