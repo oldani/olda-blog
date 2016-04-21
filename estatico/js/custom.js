@@ -59,7 +59,7 @@ var $ajaxFun= function(opciones){
         data: opciones.data,
         dataType: "json",
         beforeSend:function(){
-            opciones.before();
+            opciones.before;
         },
         success: function(data){
             opciones.successFun(data);
@@ -171,7 +171,7 @@ var sideBar= function(){
         $this= $(this);
         data= "page="+ $this.data("request");
         opciones= {url:"/estadisticas", metodo:"GET", data:data,
-                    before:ajaxObjs.before, successFun:ajaxObjs.successFun}
+                    before:ajaxObjs.before(), successFun:ajaxObjs.successFun}
         
         $ajaxFun(opciones);
     });
