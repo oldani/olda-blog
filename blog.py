@@ -91,20 +91,10 @@ class Handler(webapp2.RequestHandler):
 		return memcache.get(key)
 
 
-	def cachFront(self, key="", update=False):
-		entradas=memcache.get(key)
-		if entradas is None or update:
-			logging.error("DB QUERY")
-			entradas=dbEntradas.post_recientes()
-			memcache.set(key, entradas)
-		return entradas
-
-
-
 
 class MainHandler(Handler):
     def get(self):
-    	entradas= self.cachFront(key="reciente")
+    	entradas= dbEntradas.post_recientes()
     	topics= topicsCantidad.get_nTopics()
     	self.render("index.html", entradas=entradas, topics=topics,
     				 login=self.is_login(), username=self.who_login())
@@ -131,15 +121,10 @@ class NewPostHandler(Handler):
 		
 
 		if titulo and post  and (topic!="Choose one.."):
-			#entrada= dbEntradas(title=titulo, post=post, topic=topic, user=username)
-			#entrada.put()
+	
 			entrada= dbEntradas.guardar_post(titulo, post, topic, username)
-			postId= str(entrada.key.id())
-			self.set_memcache(postId, entrada)
-			#time.sleep(1)
-			self.cachFront(key="reciente", update=True)
 			topicsCantidad.actualizar_topics()
-			self.redirect('/%s' %postId)
+			self.redirect('/%s' %entrada)
 
 
 		else:
@@ -267,7 +252,7 @@ class FilterHandler(Handler):
 	def get(self):
 		filtro= self.request.get("filtro")
 		if filtro=="reciente" :
-			lista_post= self.cachFront(key=filtro)
+			lista_post= dbEntradas.post_recientes()
 
 		elif filtro== "popular":
 			lista_post= dbEntradas.mas_populares()
