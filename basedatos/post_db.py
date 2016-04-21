@@ -32,7 +32,10 @@ class dbEntradas(ndb.Model):
 		post= dbEntradas(parent=parent_post(), title=titulo, 
 							post=post, topic=topic, user=user)
 		post.put()
-		return post
+		post_id= str(post.key.id())
+		memcache.set(post_id, post)
+		cls.post_recientes(update=True)
+		return post_id
 
 	@classmethod
 	def query_post(cls):
@@ -46,9 +49,16 @@ class dbEntradas(ndb.Model):
 		return key
 
 	@classmethod
-	def post_recientes(cls):
-		posts= cls.query_post().order(-dbEntradas.fecha_creacion).fetch(10)	
-		return list(posts)
+	def post_recientes(cls, update=False):
+		key="recientes"
+		entradas= memcache.get(key)
+		if entradas is None or update:
+			posts= cls.query_post().order(-dbEntradas.fecha_creacion
+											).fetch(10)
+			entradas=list(posts)
+			memcache.set(key, entradas)
+			logging.error("DBQuery")	
+		return entradas
 
 	@classmethod
 	def mas_populares(cls):
@@ -87,6 +97,7 @@ class dbEntradas(ndb.Model):
 		else:
 			post.status= status
 		post.put()
+		cls.post_recientes(update=True)
 		topicsCantidad.actualizar_topics()
 
 	@classmethod
@@ -103,6 +114,9 @@ class dbEntradas(ndb.Model):
 	def delete_post(cls, post_id):
 		key= cls.key_post(post_id)
 		key.delete()
+		cls.post_recientes(update=True)
+		topicsCantidad.actualizar_topics()
+
 
 id_entity=0
 class topicsCantidad(ndb.Model):
