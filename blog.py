@@ -307,19 +307,34 @@ class EstadisticasHandler(Handler):
 	def get(self):
 		pagina= self.request.get("page")
 		usuario= self.who_login()
+		self.json_board(pagina, usuario)
+		
 
-		if pagina== "tables":
-			posts= dbEntradas.usuario_post(usuario, "score")
-			popularidad_topic = dict(Programing=0, Sports=0, Science=0, 
+	def json_board(self, page, user):
+		posts= dbEntradas.usuario_post(user, "score")
+		popularidad_topic = dict(Programing=0, Sports=0, Science=0, 
 								Culture=0, Games=0, News=0, Technology=0)
 
+		if page== "tables":
 			for cadaPost in posts:
 				popularidad_topic[cadaPost.topic]+=cadaPost.score
 			
 			t= self.render_string("tables_dashboard.html",
 									popular_post=posts[:5], 
 									popularidad_topic=popularidad_topic)
-			self.enviar_json(t)
+		elif page == "charts":
+
+			for cadaPost in posts:
+				popularidad_topic[cadaPost.topic]+=1
+			
+			t= self.render_string("charts_dashboard.html",
+									popularidad_topic=popularidad_topic)
+		elif page == "post":
+			posts= dbEntradas.usuario_post(user, "creacion")
+			t= self.render_string("post_ajax_dash.html", posts=posts)
+
+		self.enviar_json(t)
+
 
 app = webapp2.WSGIApplication([
     ('/?', MainHandler),
