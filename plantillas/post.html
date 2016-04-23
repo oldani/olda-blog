@@ -1,10 +1,55 @@
 {% extends "base.html" %}
 {% block contenido %}
 	<div class="row">
+		<div class=" hidden-xs col-sm-12">
+			<div id="carusel" class="carousel slide" data-ride="carousel">
+				<ol class="carousel-indicators">
+					<li class="active" data-target="#carusel" data-slide-to="0"></li>
+					<li data-target="#carusel" data-slide-to="1"></li>
+					<li data-target="#carusel" data-slide-to="2"></li>
+					<li data-target="#carusel" data-slide-to="3"></li>
+				</ol>
+				<!-- aqui todas las imagenes -->
+				<div class="carousel-inner" role="listbox">
+					<div class="item active">
+						<img src="estatico/img/android.jpg" class="img-responsive">
+					</div>
+					<div class="item">
+						<img src="estatico/img/lights.jpg" class="img-responsive">
+					</div>
+					<div class="item">
+						<img src="estatico/img/bosque.jpg" class="img-responsive">
+					</div>
+					<div class="item">
+						<img src="estatico/img/search.gif" class="img-responsive">
+					</div>
+				</div>
+				<!-- aqui ermina el div de todas la img -->
+			</div>
+			<!-- controles -->
+		</div>
+  		<div class="col-xs-12">
+			<nav class="navbar navbar-default navbar-static-top" style="margin-top:10px; padding-top:5px">
+				<div class="container">
+					<ul class="nav nav-pills">
+	  					<li role="presentation">
+	  						<a href="/">Home</a>
+	  					</li>
+	 					<li role="presentation">
+	 						<a href="#">About Us</a>
+	 					</li>
+	  					
+					</ul>
+
+				</div>
+			</nav>
+		</div>
+  	</div>
+	<div class="row">
 		<div class="col-xs-12 col-md-8">
 			<section>
 				<div class="row">
-					<div class="col-xs-10 col-xs-offset-1 col-md-12 col-md-offset-0">
+					<div class="col-xs-10 col-xs-offset-1 col-sm-12 col-sm-offset-0">
 						<div class="row">
 							<div class="col-xs-9">
 								<h3 class="text-uppercase text-left">
@@ -109,10 +154,9 @@
 				</div>
 			</section>
 		</div>
-		<div class="hidden-xs hidden-sm col-md-3 col-md-offset-1" style="background-color:red">
+		<div class="hidden-xs hidden-sm col-md-3 col-md-offset-1">
 			<aside>
-				<p>GEUl lh olh</p>
-				<h3>HOLAAA</h3>
+				<img src="estatico/img/working.jpg" alt="Under Development.." class="img-responsive center-block">
 			</aside>			
 		</div>
 	</div>
@@ -120,8 +164,12 @@
 		$(document).ready(function(){
 			$("#formComentarios").submit(function(e){
 				e.preventDefault();
-				data= $(this).serialize();
-				var $field= $(this).closest("fieldset");
+				var $this, data, $field;
+
+				$this= $(this);
+				data= $this.serialize();
+				$field= $this.closest("fieldset");
+
 				$.ajax({
 					url: window.location.pathname,
 					method: "POST",
@@ -139,6 +187,8 @@
 					},
 					complete: function(){
 						$field.prop("disabled", false);
+						$this.find("input:text, textarea").val("");
+
 					}
 				});
 			});

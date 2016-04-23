@@ -140,8 +140,8 @@ class PostHandler(Handler):
 			if not post.status and usuario != post.user:
 				self.render("404.html")
 			self.render_post(post)
-		
-		self.render("404.html")
+		else:
+			self.render("404.html")
 
 	def render_post(self, post):
 		self.render("post.html", post=post, login=self.is_login(),

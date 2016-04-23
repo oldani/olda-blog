@@ -42,7 +42,7 @@
 			background: rgba(35, 55, 68, 0.8);
 		}
 		.container{
-			width: 960px;
+			width: 100%;
 			margin: 0 auto;
 		}
 		.banner-top{
@@ -50,15 +50,16 @@
 			text-align: center;
 		}
 		.info-pic{
-			width: 440px;
+			width: 100%; /*440*/
 			text-align: center;
 			margin: 80px auto 10px auto;
 			height: 172px;
 		}
 		.info-text{
 			padding: 10px;
-			width: 440px;
+			width: 100%;
 			margin: 10px auto;
+			text-align: center;
 		}
 	</style>
 </head>
@@ -66,10 +67,12 @@
 	<div class="headbar">&nbsp;</div>
 	<div class="container">
 		<div class="content">
-			<div class="info-pic"><img src="//lh5.ggpht.com/T4e0wNWnz3lvue6BlVQky1cEHlUvWBbbSKLVYLXRVhUGIgXHTvbZXGmZEdM1VnCiOHkzMkDNjMYdw1GtEw=s0#w=273&h=172" alt="What are you doing here, Doctor?" title="What are you doing here, Doctor?"></div>
+			<div class="info-pic">
+				<img src="../estatico/img/404.png" alt="Error 404" class="img-resposive">
+			</div>
 			<div class="info-text">
 				<h1>We're very sorry...</h1>
-				<p class="standout">The page you were looking for slipped through a crack and can't be found!</p>
+				<p class="standout">The page you were looking can't be found!</p>
 				<p class="standout">Return to <a href="/">our homepage</a>.</p>
 			</div>
 		</div>
