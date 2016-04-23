@@ -101,6 +101,7 @@ class dbEntradas(ndb.Model):
 			post.status= status
 		post.put()
 		cls.post_recientes(update=True)
+		cls.get_post(post_id, update=True)
 		topicsCantidad.actualizar_topics()
 
 	@classmethod
@@ -118,6 +119,7 @@ class dbEntradas(ndb.Model):
 		key= cls.key_post(post_id)
 		key.delete()
 		cls.post_recientes(update=True)
+		cls.get_post(post_id, update=True)
 		topicsCantidad.actualizar_topics()
 
 

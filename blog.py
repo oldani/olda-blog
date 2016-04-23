@@ -139,7 +139,8 @@ class PostHandler(Handler):
 		if post:
 			if not post.status and usuario != post.user:
 				self.render("404.html")
-			self.render_post(post)
+			else:
+				self.render_post(post)
 		else:
 			self.render("404.html")
 
