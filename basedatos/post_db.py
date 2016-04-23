@@ -120,6 +120,7 @@ class dbEntradas(ndb.Model):
 		key.delete()
 		memcache.delete(post_id)
 		cls.post_recientes(update=True)
+		cls.get_post(post_id, update=True)
 		topicsCantidad.actualizar_topics()
 
 
