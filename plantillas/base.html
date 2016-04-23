@@ -11,11 +11,14 @@
   	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/formvalidation/0.6.1/css/formValidation.min.css">
   	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
   	<script type="text/javascript" src="estatico/js/helper_vars.js"></script>
+  	<style type="text/css">
+  		
+  	</style>
   	
 </head>
 <body>
 	<header>
-		<nav class="navbar navbar-default navbar-static-top">
+		<nav class="navbar navbar-inverse navbar-fixed-top">
 			<div class="container">
 				<div class="navbar-header">
 					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#menu" aria-expanded="false" aria-controls="menu">
@@ -24,43 +27,45 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</button>
-					<a href="/" class="navbar-brand">OLDA BLOg</a>
+					<a href="/" class="navbar-brand orange">
+						<i class="fa fa-ils icon"></i>
+						OLDA BLOg
+					</a>
+					
 					{% if login %}
-						<a href="/newpost" class="btn btn-primary navbar-btn btn-sm">New Post&nbsp <span class="glyphicon glyphicon-pencil"></span></a>
+						<a href="/newpost" class="btn nwpost navbar-btn btn-sm">New Post&nbsp <span class="glyphicon glyphicon-pencil"></span></a>
 					{% endif %}
 				</div>
 				<div class="navbar-collapse collapse navbar-t" id="menu">
 					<ul class="nav navbar-nav navbar-right" role="navigation">
-						<li><a href="/">Home</a></li>
 						{% if login %}
-						<li>
-							<div class="btn-group">
+						<li class="dropdown">
+							
 								
-								<button type="button" class="btn btn-default dropdown-toggle navbar-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									<i class="fa fa-user fa-fw"></i>{{username}}
-									<span class="caret"></span>
-								</button>
-								<ul class="dropdown-menu">
-									<li><a href="/dashboard">
-										<i class="fa fa-pencil-square-o fa-fw"></i>Admin Panel</a>
-									</li>
-									<li><a href="#">
-										<i class="fa fa-cog fa-fw"></i>Settings</a>
-									</li>
-									<li role="separator" class="divider logout"></li>
-									<li><a class="logout">
-										<i class="fa fa-sign-out fa-fw"></i>Logout</a>
-									</li>
-								</ul>
+							<a id="dLabel" class="dropdown-toggle reset-padding orange" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<img src="estatico/img/user.jpg" class="img-user">{{username}}
+								<span class="caret"></span>
+							</a>
+							<ul class="dropdown-menu" aria-labelledby="dLabel">
+								<li><a href="/dashboard">
+									<i class="fa fa-pencil-square-o fa-fw"></i>Admin Panel</a>
+								</li>
+								<li><a href="#">
+									<i class="fa fa-cog fa-fw"></i>Settings</a>
+								</li>
+								<li role="separator" class="divider logout"></li>
+								<li><a class="logout">
+									<i class="fa fa-sign-out fa-fw"></i>Logout</a>
+								</li>
+							</ul>
 
-							</div>
+							
 						</li>
 						{% endif %}
 						{% if not login %}
-							<li><a href="#" data-toggle="modal" data-target="#login">Log In</a></li>
-							<li><a href="#" data-toggle="modal" data-target="#signup">Sign Up</a></li>
+							<li><button type="button" class="btn navbar-btn login" href="#" data-toggle="modal" data-target="#login">Log In</button></li>
+							<li><button type="button" class="btn navbar-btn signup" href="#" data-toggle="modal" data-target="#signup">Sign Up</button></li>
 						{% endif %}
-						<li><a href="#">About</a></li>
 					</ul>
 				<div>
 			</div>

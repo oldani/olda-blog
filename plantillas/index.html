@@ -1,11 +1,59 @@
 {% extends "base.html" %}
 {% block contenido %}
 	<div class="row">
-		<div class="col-xs-12 col-md-8">
+		<div class=" hidden-xs col-sm-12">
+			<div id="carusel" class="carousel slide" data-ride="carousel">
+				<ol class="carousel-indicators">
+					<li class="active" data-target="#carusel" data-slide-to="0"></li>
+					<li data-target="#carusel" data-slide-to="1"></li>
+					<li data-target="#carusel" data-slide-to="2"></li>
+					<li data-target="#carusel" data-slide-to="3"></li>
+				</ol>
+				<!-- aqui todas las imagenes -->
+				<div class="carousel-inner" role="listbox">
+					<div class="item active">
+						<img src="estatico/img/jump.jpg" class="img-responsive">
+					</div>
+					<div class="item">
+						<img src="estatico/img/estudiantes.png" class="img-responsive">
+					</div>
+					<div class="item">
+						<img src="estatico/img/math.png" class="img-responsive">
+					</div>
+					<div class="item">
+						<img src="estatico/img/montana.jpg" class="img-responsive">
+					</div>
+				</div>
+				<!-- aqui ermina el div de todas la img -->
+			</div>
+			<!-- controles -->
+
+		</div>
+		<div class="col-xs-12">
+			<nav class="navbar navbar-default navbar-static-top" style="margin-top:10px; padding-top:5px">
+				<div class="container">
+					<ul class="nav nav-pills">
+	  					<li role="presentation" class="active">
+	  						<a href="/">Home</a>
+	  					</li>
+	 					<li role="presentation">
+	 						<a href="#">About Us</a>
+	 					</li>
+	  					
+					</ul>
+
+				</div>
+			</nav>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-xs-12 col-sm-12 col-md-8">
+			
 			<section>
 				{% for cadaPost in entradas %}
 					<div class="row">
-						<div class="col-xs-10 col-xs-offset-1 col-md-12 col-md-offset-0">
+						<div class="col-xs-10 col-xs-offset-1 col-sm-12 col-sm-offset-0">
 							<div class="row">
 								<div class="col-xs-9">
 									<h3>
@@ -28,7 +76,7 @@
 									{{cadaPost.post |safe|truncate(1500, True)}}
 								</div>
 								{% if cadaPost.post|length >1500 %}
-								<a href="/{{cadaPost.key.integer_id()}}">Continue reading...</a>
+								<a class="btn btn-default" href="/{{cadaPost.key.integer_id()}}">Continue reading...</a>
 								{% endif %}
 							</div>
 
@@ -48,7 +96,9 @@
 							<div class="list-group">
 								<button type="button" class="list-group-item active" data-filter="reciente">Recently</button>
 								<button type="button" class="list-group-item" data-filter="popular">Most Popular</button>
-								<button type="button" class="list-group-item" data-toggle="collapse" data-target="#topics">Topic</button>
+								<button type="button" class="list-group-item" data-toggle="collapse" data-target="#topics">Topic
+									<span class="caret"></span>
+								</button>
 								<div class="collapse" id="topics"> 
 									<button type="button" class="list-group-item" data-filter="Programing">Programing
 										<span class="badge">{{topics.Programing}}</span>
@@ -82,11 +132,17 @@
 	</div>
 	<script type="text/javascript">
 		$(document).ready(function(){
-			$(".list-group").on("click", "button", function(){
-				data=$(this).data("filter")
-				var activeClass="active"
-				$(".active").removeClass(activeClass)
-				$(this).addClass(activeClass)
+			$(".list-group").on("click", "button", function(ev){
+				ev.preventDefault();
+				var $this, data, activeClass;
+
+				$this= $(this);
+				data= $this.data("filter");
+				activeClass= "active";
+
+				$(".list-group").find("."+activeClass).removeClass(activeClass);
+				$this.addClass(activeClass);
+
 				if (data) {
 					$.ajax({
 						url:"/filter",
@@ -94,11 +150,13 @@
 						data: "filtro="+data,
 						dataType: "json",
 						success: function(data){
+							
 							if (!data){
 								alert("Sorry we do not have any post about this topic yet, so why to not"+
 									     " make the first post about this!");
 							} else {
-								$("section").html(data).slideDown();
+								$("section").hide().html(data).fadeIn();
+
 							};
 
 						},
